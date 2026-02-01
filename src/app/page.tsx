@@ -2,7 +2,6 @@ import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 import { ArtworkCard } from '@/components/shared/ArtworkCard';
 import { CompactHero } from '@/components/shared/CompactHero';
-import { AdvancedSearch } from '@/components/shared/AdvancedSearch';
 import artworksData from '@/data/artworks.json';
 
 // Filter artworks by type
@@ -13,15 +12,8 @@ const newArrivals = artworksData.filter(art => art.newArrival).slice(0, 4);
 export default function Page() {
   return (
     <div className="flex flex-col gap-6 pb-24 bg-background">
-      {/* Advanced Search - Aligned with Carousel Top */}
-      <section className="container px-4 md:px-8 pt-4">
-        <div className="mb-2">
-          <AdvancedSearch />
-        </div>
-      </section>
-
-      {/* Compact Hero with Carousel + Category Selector */}
-      <section className="container px-4 md:px-8 -mt-2">
+      {/* Compact Hero with Carousel + Category Selector + Advanced Search */}
+      <section className="container px-4 md:px-8 pt-2">
         <CompactHero />
       </section>
 
