@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
@@ -14,7 +15,10 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
-import { Camera, CreditCard, ArrowRight, ArrowLeft, CheckCircle2 } from 'lucide-react';
+import { Camera, CreditCard, ArrowRight, ArrowLeft, CheckCircle2, Loader2 } from 'lucide-react';
+import authService from '@/services/auth.service';
+import stripeService from '@/services/stripe.service';
+import aiService from '@/services/ai.service';
 
 const STEPS = [
     { number: 1, label: 'Personal Info', id: 'personal' },
@@ -28,16 +32,22 @@ const STEPS = [
 const LANGUAGES = ['English', 'German', 'Spanish', 'French', 'Italian', 'Portuguese', 'Chinese', 'Japanese'];
 
 export default function ArtistOnboardingPage() {
+    const router = useRouter();
     const [currentStep, setCurrentStep] = useState(1);
     const [profilePhoto, setProfilePhoto] = useState<string | null>(null);
     const [selectedPlan, setSelectedPlan] = useState('deluxe'); // Default to DeLuxe plan
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
+    const [generatingBio, setGeneratingBio] = useState(false);
     const [formData, setFormData] = useState({
         firstName: '',
         lastName: '',
         displayName: '',
         email: '',
+        streetAddress: '',
         city: '',
         state: '',
+        zipCode: '',
         country: 'United States',
         languages: ['English'],
         bio: '',
@@ -46,6 +56,10 @@ export default function ArtistOnboardingPage() {
         heightRange: '',
         priceRange: '',
         acceptsCommissions: '',
+        website: '',
+        instagram: '',
+        facebook: '',
+        twitter: '',
     });
 
     const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -84,9 +98,71 @@ export default function ArtistOnboardingPage() {
         if (currentStep > 1) setCurrentStep(currentStep - 1);
     };
 
-    const handleComplete = () => {
-        alert('Onboarding complete! Redirecting to dashboard...');
-        // TODO: Submit data to API and navigate to dashboard
+    const handleGenerateBio = async () => {
+        if (!formData.experience || !formData.city) {
+            setError('Please fill in your artistic experience and location first');
+            return;
+        }
+
+        setGeneratingBio(true);
+        setError(null);
+
+        try {
+            const bio = await aiService.generateBio({
+                style: formData.experience,
+                medium: formData.priceRange || 'Mixed Media',
+                location: `${formData.city}, ${formData.state || formData.country}`,
+                additionalInfo: formData.experience,
+            });
+            setFormData({ ...formData, bio });
+        } catch (err: any) {
+            setError(err.response?.data?.message || 'Failed to generate bio. Please try again.');
+        } finally {
+            setGeneratingBio(false);
+        }
+    };
+
+    const handleStripeConnect = async () => {
+        setLoading(true);
+        setError(null);
+
+        try {
+            const { url } = await stripeService.getOnboardingLink();
+            window.open(url, '_blank');
+        } catch (err: any) {
+            setError(err.response?.data?.message || 'Failed to connect Stripe. Please try again.');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleComplete = async () => {
+        setLoading(true);
+        setError(null);
+
+        try {
+            // Submit all artist data to backend
+            await authService.becomeArtist({
+                artistName: formData.displayName || `${formData.firstName} ${formData.lastName}`,
+                bio: formData.bio,
+                website: formData.website,
+                instagram: formData.instagram,
+                facebook: formData.facebook,
+                twitter: formData.twitter,
+                city: formData.city,
+                state: formData.state,
+                country: formData.country,
+                languages: formData.languages,
+                subscriptionTier: selectedPlan,
+            });
+
+            // Redirect to upload page
+            router.push('/artist/upload');
+        } catch (err: any) {
+            setError(err.response?.data?.message || 'Failed to complete onboarding. Please try again.');
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
@@ -215,24 +291,44 @@ export default function ArtistOnboardingPage() {
                             </div>
 
                             {/* Location */}
-                            <div className="grid grid-cols-3 gap-4">
+                            <div className="space-y-4">
                                 <div>
-                                    <Label htmlFor="city">City *</Label>
+                                    <Label htmlFor="streetAddress">Street Address</Label>
                                     <Input
-                                        id="city"
-                                        placeholder="Los Angeles"
-                                        value={formData.city}
-                                        onChange={(e) => setFormData({ ...formData, city: e.target.value })}
+                                        id="streetAddress"
+                                        placeholder="123 Main St, Apt 4B"
+                                        value={formData.streetAddress}
+                                        onChange={(e) => setFormData({ ...formData, streetAddress: e.target.value })}
                                     />
                                 </div>
-                                <div>
-                                    <Label htmlFor="state">State/Province</Label>
-                                    <Input
-                                        id="state"
-                                        placeholder="California"
-                                        value={formData.state}
-                                        onChange={(e) => setFormData({ ...formData, state: e.target.value })}
-                                    />
+                                <div className="grid grid-cols-3 gap-4">
+                                    <div>
+                                        <Label htmlFor="city">City *</Label>
+                                        <Input
+                                            id="city"
+                                            placeholder="Los Angeles"
+                                            value={formData.city}
+                                            onChange={(e) => setFormData({ ...formData, city: e.target.value })}
+                                        />
+                                    </div>
+                                    <div>
+                                        <Label htmlFor="state">State/Province</Label>
+                                        <Input
+                                            id="state"
+                                            placeholder="California"
+                                            value={formData.state}
+                                            onChange={(e) => setFormData({ ...formData, state: e.target.value })}
+                                        />
+                                    </div>
+                                    <div>
+                                        <Label htmlFor="zipCode">ZIP Code</Label>
+                                        <Input
+                                            id="zipCode"
+                                            placeholder="90001"
+                                            value={formData.zipCode}
+                                            onChange={(e) => setFormData({ ...formData, zipCode: e.target.value })}
+                                        />
+                                    </div>
                                 </div>
                                 <div>
                                     <Label htmlFor="country">Country *</Label>
@@ -287,8 +383,8 @@ export default function ArtistOnboardingPage() {
                                     type="button"
                                     onClick={() => setSelectedPlan('starter')}
                                     className={`text-left p-5 rounded-xl border-2 transition-all ${selectedPlan === 'starter'
-                                            ? 'border-primary bg-primary/5 shadow-lg'
-                                            : 'border-gray-200 hover:border-gray-300'
+                                        ? 'border-primary bg-primary/5 shadow-lg'
+                                        : 'border-gray-200 hover:border-gray-300'
                                         }`}
                                 >
                                     <div className="flex items-center justify-between mb-3">
@@ -312,8 +408,8 @@ export default function ArtistOnboardingPage() {
                                     type="button"
                                     onClick={() => setSelectedPlan('superior')}
                                     className={`text-left p-5 rounded-xl border-2 transition-all ${selectedPlan === 'superior'
-                                            ? 'border-primary bg-primary/5 shadow-lg'
-                                            : 'border-gray-200 hover:border-gray-300'
+                                        ? 'border-primary bg-primary/5 shadow-lg'
+                                        : 'border-gray-200 hover:border-gray-300'
                                         }`}
                                 >
                                     <div className="flex items-center justify-between mb-3">
@@ -337,8 +433,8 @@ export default function ArtistOnboardingPage() {
                                     type="button"
                                     onClick={() => setSelectedPlan('deluxe')}
                                     className={`text-left p-5 rounded-xl border-2 relative transition-all ${selectedPlan === 'deluxe'
-                                            ? 'border-primary bg-primary shadow-lg text-white scale-105'
-                                            : 'border-primary/50 hover:border-primary'
+                                        ? 'border-primary bg-primary shadow-lg text-white scale-105'
+                                        : 'border-primary/50 hover:border-primary'
                                         }`}
                                 >
                                     <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-yellow-400 text-gray-900 px-3 py-1 rounded-full text-xs font-bold">
@@ -366,8 +462,8 @@ export default function ArtistOnboardingPage() {
                                     type="button"
                                     onClick={() => setSelectedPlan('professional')}
                                     className={`text-left p-5 rounded-xl border-2 transition-all ${selectedPlan === 'professional'
-                                            ? 'border-primary bg-primary/5 shadow-lg'
-                                            : 'border-gray-200 hover:border-gray-300'
+                                        ? 'border-primary bg-primary/5 shadow-lg'
+                                        : 'border-gray-200 hover:border-gray-300'
                                         }`}
                                 >
                                     <div className="flex items-center justify-between mb-3">
@@ -392,8 +488,8 @@ export default function ArtistOnboardingPage() {
                                     type="button"
                                     onClick={() => setSelectedPlan('toptier')}
                                     className={`text-left p-5 rounded-xl border-2 transition-all ${selectedPlan === 'toptier'
-                                            ? 'border-primary bg-primary/5 shadow-lg'
-                                            : 'border-gray-200 hover:border-gray-300'
+                                        ? 'border-primary bg-primary/5 shadow-lg'
+                                        : 'border-gray-200 hover:border-gray-300'
                                         }`}
                                 >
                                     <div className="flex items-center justify-between mb-3">

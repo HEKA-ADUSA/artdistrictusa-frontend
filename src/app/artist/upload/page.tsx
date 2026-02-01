@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -12,11 +13,15 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
-import { Upload, Sparkles, Save, Send } from 'lucide-react';
+import { Upload, Sparkles, Save, Send, Loader2 } from 'lucide-react';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import artworkService from '@/services/artwork.service';
+import aiService from '@/services/ai.service';
 
 export default function ArtworkUploadPage() {
-    const [images, setImages] = useState<string[]>([]);
+    const router = useRouter();
+    const [images, setImages] = useState<File[]>([]);
+    const [imagePreviews, setImagePreviews] = useState<string[]>([]);
     const [formData, setFormData] = useState({
         title: '',
         description: '',
@@ -32,17 +37,23 @@ export default function ArtworkUploadPage() {
     });
     const [showProfileAlert, setShowProfileAlert] = useState(true);
     const [generatingDescription, setGeneratingDescription] = useState(false);
+    const [uploading, setUploading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
 
     const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
         const files = e.target.files;
         if (files) {
-            const newImages: string[] = [];
-            Array.from(files).forEach((file) => {
+            const filesArray = Array.from(files).slice(0, 12 - images.length);
+            setImages([...images, ...filesArray]);
+
+            // Create previews
+            const previews: string[] = [];
+            filesArray.forEach((file) => {
                 const reader = new FileReader();
                 reader.onloadend = () => {
-                    newImages.push(reader.result as string);
-                    if (newImages.length === files.length) {
-                        setImages([...images, ...newImages].slice(0, 12)); // Max 12 images
+                    previews.push(reader.result as string);
+                    if (previews.length === filesArray.length) {
+                        setImagePreviews([...imagePreviews, ...previews]);
                     }
                 };
                 reader.readAsDataURL(file);
@@ -51,25 +62,66 @@ export default function ArtworkUploadPage() {
     };
 
     const handleGenerateDescription = async () => {
+        if (!formData.title || !formData.medium) {
+            setError('Please fill in title and medium first');
+            return;
+        }
+
         setGeneratingDescription(true);
-        // Simulate AI generation
-        setTimeout(() => {
-            setFormData({
-                ...formData,
-                description: `A stunning example of ${formData.style || 'contemporary'} art, this ${formData.medium || 'canvas'} piece showcases exceptional technique and artistic vision. The composition draws viewers in with its dynamic use of color and form, making it a perfect centerpiece for any modern art collection.`,
+        setError(null);
+
+        try {
+            const description = await aiService.enhanceDescription({
+                title: formData.title,
+                medium: formData.medium,
+                rawDescription: formData.description || 'A beautiful artwork',
+                style: formData.style,
+                dimensions: `${formData.width}x${formData.height}`,
             });
+            setFormData({ ...formData, description });
+        } catch (err: any) {
+            setError(err.response?.data?.message || 'Failed to generate description');
+        } finally {
             setGeneratingDescription(false);
-        }, 2000);
+        }
     };
 
-    const handlePublish = () => {
-        alert('Artwork published successfully!');
-        // TODO: Submit to API
+    const handlePublish = async () => {
+        if (!formData.title || !formData.price || images.length === 0) {
+            setError('Please fill in title, price and upload at least one image');
+            return;
+        }
+
+        setUploading(true);
+        setError(null);
+
+        try {
+            await artworkService.uploadArtwork({
+                title: formData.title,
+                description: formData.description,
+                medium: formData.medium,
+                year: parseInt(formData.yearCreated) || undefined,
+                priceUsd: parseFloat(formData.price),
+                categories: formData.category ? [formData.category] : [],
+                tags: formData.style ? [formData.style] : [],
+                width: parseFloat(formData.width) || undefined,
+                height: parseFloat(formData.height) || undefined,
+                depth: parseFloat(formData.depth) || undefined,
+                isFramed: formData.isFramed,
+            }, images);
+
+            // Success! Redirect to artist dashboard or artworks
+            router.push('/artworks');
+        } catch (err: any) {
+            setError(err.response?.data?.message || 'Failed to publish artwork');
+        } finally {
+            setUploading(false);
+        }
     };
 
     const handleSaveDraft = () => {
-        alert('Draft saved!');
-        // TODO: Save draft to API
+        // TODO: Implement draft saving if needed
+        alert('Draft feature coming soon!');
     };
 
     return (
@@ -144,14 +196,14 @@ export default function ArtworkUploadPage() {
                             </div>
 
                             {/* Image Preview Grid */}
-                            {images.length > 0 && (
+                            {imagePreviews.length > 0 && (
                                 <div className="grid grid-cols-4 gap-4 mt-4">
-                                    {images.map((img, idx) => (
+                                    {imagePreviews.map((img, idx) => (
                                         <div key={idx} className="aspect-square rounded-lg overflow-hidden border border-gray-200">
                                             <img src={img} alt={`Upload ${idx + 1}`} className="w-full h-full object-cover" />
                                         </div>
                                     ))}
-                                    {[...Array(12 - images.length)].map((_, idx) => (
+                                    {[...Array(12 - imagePreviews.length)].map((_, idx) => (
                                         <div key={`empty-${idx}`} className="aspect-square rounded-lg border-2 border-dashed border-gray-200"></div>
                                     ))}
                                 </div>
@@ -165,6 +217,12 @@ export default function ArtworkUploadPage() {
 
                     {/* Right Column - Artwork Details */}
                     <div className="space-y-6">
+                        {error && (
+                            <Alert variant="destructive">
+                                <AlertDescription>{error}</AlertDescription>
+                            </Alert>
+                        )}
+
                         <div>
                             <Label htmlFor="title">Title *</Label>
                             <Input
@@ -316,11 +374,20 @@ export default function ArtworkUploadPage() {
 
                         {/* Action Buttons */}
                         <div className="flex gap-3 pt-4">
-                            <Button onClick={handlePublish} size="lg" className="flex-1">
-                                <Send className="mr-2 h-4 w-4" />
-                                Publish Artwork
+                            <Button onClick={handlePublish} size="lg" className="flex-1" disabled={uploading}>
+                                {uploading ? (
+                                    <>
+                                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                        Publishing...
+                                    </>
+                                ) : (
+                                    <>
+                                        <Send className="mr-2 h-4 w-4" />
+                                        Publish Artwork
+                                    </>
+                                )}
                             </Button>
-                            <Button onClick={handleSaveDraft} variant="outline" size="lg">
+                            <Button onClick={handleSaveDraft} variant="outline" size="lg" disabled={uploading}>
                                 <Save className="mr-2 h-4 w-4" />
                                 Save as Draft
                             </Button>
