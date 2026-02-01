@@ -107,7 +107,7 @@ export function Footer() {
                                 alt="ARTDistrictUSA"
                                 width={300}
                                 height={64}
-                                className="h-16 w-auto brightness-0 invert"
+                                className="h-16 w-auto"
                             />
                         </Link>
                         <p className="text-gray-400 text-sm">
