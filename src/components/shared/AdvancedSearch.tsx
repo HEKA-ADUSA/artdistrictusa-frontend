@@ -90,7 +90,7 @@ export function AdvancedSearch() {
                     <ChevronDown className="h-4 w-4" />
                 </Button>
             </PopoverTrigger>
-            <PopoverContent className="w-80" align="end">
+            <PopoverContent className="w-80" align="start">
                 <div className="grid gap-4">
                     <div className="space-y-2">
                         <h4 className="font-medium leading-none">Find Your Perfect Artwork</h4>
