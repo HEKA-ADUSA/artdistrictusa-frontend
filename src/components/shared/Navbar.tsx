@@ -24,7 +24,7 @@ export function Navbar() {
     return (
         <header className="sticky top-0 z-50 w-full border-b bg-white shadow-sm">
             {/* Single Row: Logo, Nav, and Auth - Compact Layout */}
-            <div className="container flex h-24 items-center px-4 gap-8">
+            <div className="container mx-auto flex h-24 items-center px-4 md:px-8 gap-8">
                 {/* Logo */}
                 <Link href="/" className="flex items-center flex-shrink-0">
                     <Image

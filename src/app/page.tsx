@@ -13,7 +13,7 @@ export default function Page() {
   return (
     <div className="flex flex-col gap-6 pb-24 bg-background">
       {/* Compact Hero with Carousel + Category Selector + Advanced Search */}
-      <section className="container px-4 md:px-8 pt-2">
+      <section className="container px-4 md:px-8 pt-8">
         <CompactHero />
       </section>
 
