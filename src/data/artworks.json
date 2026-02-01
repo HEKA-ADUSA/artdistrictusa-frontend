@@ -1,0 +1,572 @@
+[
+  {
+    "id": 1,
+    "articleNumber": "AB-0099N",
+    "title": "Creative Spirit",
+    "description": "A stunning abstract piece that captures the essence of modern art.",
+    "artistName": "Liu Cheng Yong",
+    "artistBio": "Contemporary abstract artist",
+    "price": 998,
+    "dimensions": {
+      "width": 40,
+      "height": 60,
+      "depth": 1.5
+    },
+    "imageUrl": "/artworks/AB-0099N-LCY-40X60x1.5.jpg",
+    "category": "Painting",
+    "featured": true,
+    "bestseller": true,
+    "newArrival": false
+  },
+  {
+    "id": 2,
+    "articleNumber": "AB-0144",
+    "title": "Chromatic Dance",
+    "description": "A perfect blend of traditional technique and modern expression.",
+    "artistName": "Liu Cheng Yong",
+    "artistBio": "Contemporary abstract artist",
+    "price": 998,
+    "dimensions": {
+      "width": 48,
+      "height": 48,
+      "depth": 1.5
+    },
+    "imageUrl": "/artworks/AB-0144-LCY-48X48x1.5.jpg",
+    "category": "Painting",
+    "featured": true,
+    "bestseller": false,
+    "newArrival": false
+  },
+  {
+    "id": 3,
+    "articleNumber": "AB-0215",
+    "title": "Chromatic Dance",
+    "description": "Expertly crafted with rich textures and vibrant hues.",
+    "artistName": "Liu Cheng Yong",
+    "artistBio": "Contemporary abstract artist",
+    "price": 998,
+    "dimensions": {
+      "width": 48,
+      "height": 48,
+      "depth": 1.5
+    },
+    "imageUrl": "/artworks/AB-0215-LCY-48x48x1.5.jpg",
+    "category": "Painting",
+    "featured": true,
+    "bestseller": false,
+    "newArrival": false
+  },
+  {
+    "id": 4,
+    "articleNumber": "AB-0236",
+    "title": "Colorful Meditation",
+    "description": "A perfect blend of traditional technique and modern expression.",
+    "artistName": "Randy Liu",
+    "artistBio": "Modern expressionist painter",
+    "price": 998,
+    "dimensions": {
+      "width": 48,
+      "height": 48,
+      "depth": 1.5
+    },
+    "imageUrl": "/artworks/AB-0236-RL-48X48x1.5.jpg",
+    "category": "Painting",
+    "featured": true,
+    "bestseller": true,
+    "newArrival": false
+  },
+  {
+    "id": 5,
+    "articleNumber": "AB-0266",
+    "title": "Urban Energy",
+    "description": "Meticulously painted with premium materials on stretched canvas.",
+    "artistName": "Randy Liu",
+    "artistBio": "Modern expressionist painter",
+    "price": 498,
+    "dimensions": {
+      "width": 20,
+      "height": 20,
+      "depth": 1.5
+    },
+    "imageUrl": "/artworks/AB-0266-RL-20X20x1.5.jpg",
+    "category": "Painting",
+    "featured": true,
+    "bestseller": false,
+    "newArrival": false
+  },
+  {
+    "id": 6,
+    "articleNumber": "AB-0302",
+    "title": "Emotional Palette",
+    "description": "A stunning abstract piece that captures the essence of modern art.",
+    "artistName": "Randy Liu",
+    "artistBio": "Modern expressionist painter",
+    "price": 498,
+    "dimensions": {
+      "width": 16,
+      "height": 16,
+      "depth": 16
+    },
+    "imageUrl": "/artworks/AB-0302-RL-16x16x16.jpg",
+    "category": "Painting",
+    "featured": true,
+    "bestseller": false,
+    "newArrival": false
+  },
+  {
+    "id": 7,
+    "articleNumber": "AB-0318",
+    "title": "Creative Spirit",
+    "description": "Bold colors and dynamic composition create an unforgettable visual experience.",
+    "artistName": "Randy Liu",
+    "artistBio": "Modern expressionist painter",
+    "price": 698,
+    "dimensions": {
+      "width": 40,
+      "height": 40,
+      "depth": 1.5
+    },
+    "imageUrl": "/artworks/AB-0318-RL-40x40x1.5.jpg",
+    "category": "Painting",
+    "featured": true,
+    "bestseller": true,
+    "newArrival": false
+  },
+  {
+    "id": 8,
+    "articleNumber": "AB-0319",
+    "title": "Urban Energy",
+    "description": "This original artwork showcases the artist's unique creative vision.",
+    "artistName": "Randy Liu",
+    "artistBio": "Modern expressionist painter",
+    "price": 698,
+    "dimensions": {
+      "width": 40,
+      "height": 40,
+      "depth": 1.5
+    },
+    "imageUrl": "/artworks/AB-0319-RL-40x40x1.5.jpg",
+    "category": "Painting",
+    "featured": true,
+    "bestseller": false,
+    "newArrival": false
+  },
+  {
+    "id": 9,
+    "articleNumber": "AB-0867",
+    "title": "Textured Landscape",
+    "description": "Gallery-quality piece that adds sophistication to any collection.",
+    "artistName": "Randy Liu",
+    "artistBio": "Modern expressionist painter",
+    "price": 1098,
+    "dimensions": {
+      "width": 48,
+      "height": 48,
+      "depth": 2.5
+    },
+    "imageUrl": "/artworks/AB-0867-RL-48X48x2.5.jpg",
+    "category": "Painting",
+    "featured": false,
+    "bestseller": false,
+    "newArrival": false
+  },
+  {
+    "id": 10,
+    "articleNumber": "AB-0898",
+    "title": "Expressive Strokes",
+    "description": "A stunning abstract piece that captures the essence of modern art.",
+    "artistName": "Liu Cheng Yong",
+    "artistBio": "Contemporary abstract artist",
+    "price": 1598,
+    "dimensions": {
+      "width": 48,
+      "height": 72,
+      "depth": 1.5
+    },
+    "imageUrl": "/artworks/AB-0898-LCY-48X72X1.5.jpg",
+    "category": "Painting",
+    "featured": false,
+    "bestseller": true,
+    "newArrival": false
+  },
+  {
+    "id": 11,
+    "articleNumber": "AB-1101",
+    "title": "Pure Emotion",
+    "description": "Expertly crafted with rich textures and vibrant hues.",
+    "artistName": "Randy Liu",
+    "artistBio": "Modern expressionist painter",
+    "price": 698,
+    "dimensions": {
+      "width": 40,
+      "height": 40,
+      "depth": 1.5
+    },
+    "imageUrl": "/artworks/AB-1101-RL-40X40X1.5.jpg",
+    "category": "Painting",
+    "featured": false,
+    "bestseller": false,
+    "newArrival": false
+  },
+  {
+    "id": 12,
+    "articleNumber": "AB-1136",
+    "title": "Modern Movements",
+    "description": "Bold colors and dynamic composition create an unforgettable visual experience.",
+    "artistName": "Randy Liu",
+    "artistBio": "Modern expressionist painter",
+    "price": 798,
+    "dimensions": {
+      "width": 40,
+      "height": 40,
+      "depth": 2.5
+    },
+    "imageUrl": "/artworks/AB-1136-RL-40X40X2.5.jpg",
+    "category": "Painting",
+    "featured": false,
+    "bestseller": false,
+    "newArrival": false
+  },
+  {
+    "id": 13,
+    "articleNumber": "AB-1189",
+    "title": "Vivid Imagination",
+    "description": "This contemporary masterpiece brings energy and life to any space.",
+    "artistName": "Liu Cheng Yong",
+    "artistBio": "Contemporary abstract artist",
+    "price": 498,
+    "dimensions": {
+      "width": 32,
+      "height": 32,
+      "depth": 1.5
+    },
+    "imageUrl": "/artworks/AB-1189-LCY-32X32X1.5.jpg",
+    "category": "Painting",
+    "featured": false,
+    "bestseller": true,
+    "newArrival": false
+  },
+  {
+    "id": 14,
+    "articleNumber": "AB-1198",
+    "title": "Modern Essence",
+    "description": "A perfect blend of traditional technique and modern expression.",
+    "artistName": "Liu Cheng Yong",
+    "artistBio": "Contemporary abstract artist",
+    "price": 698,
+    "dimensions": {
+      "width": 36,
+      "height": 36,
+      "depth": 1.5
+    },
+    "imageUrl": "/artworks/AB-1198-LCY-36X36X1.5.jpg",
+    "category": "Painting",
+    "featured": false,
+    "bestseller": false,
+    "newArrival": false
+  },
+  {
+    "id": 15,
+    "articleNumber": "AB-1204",
+    "title": "Pure Emotion",
+    "description": "This original artwork showcases the artist's unique creative vision.",
+    "artistName": "Randy Liu",
+    "artistBio": "Modern expressionist painter",
+    "price": 698,
+    "dimensions": {
+      "width": 24,
+      "height": 48,
+      "depth": 1.5
+    },
+    "imageUrl": "/artworks/AB-1204-RL-24x48x1.5.jpg",
+    "category": "Painting",
+    "featured": false,
+    "bestseller": false,
+    "newArrival": false
+  },
+  {
+    "id": 16,
+    "articleNumber": "AB-1250",
+    "title": "Modern Essence",
+    "description": "Bold colors and dynamic composition create an unforgettable visual experience.",
+    "artistName": "Liu Cheng Yong",
+    "artistBio": "Contemporary abstract artist",
+    "price": 498,
+    "dimensions": {
+      "width": 32,
+      "height": 24,
+      "depth": 1.5
+    },
+    "imageUrl": "/artworks/AB-1250-LCY-32X24X1.5 copy.jpg",
+    "category": "Painting",
+    "featured": false,
+    "bestseller": true,
+    "newArrival": false
+  },
+  {
+    "id": 17,
+    "articleNumber": "AB-1311",
+    "title": "Modern Essence",
+    "description": "A perfect blend of traditional technique and modern expression.",
+    "artistName": "Randy Liu",
+    "artistBio": "Modern expressionist painter",
+    "price": 798,
+    "dimensions": {
+      "width": 40,
+      "height": 40,
+      "depth": 2.5
+    },
+    "imageUrl": "/artworks/AB-1311-RL-40x40x2.5.jpg",
+    "category": "Painting",
+    "featured": false,
+    "bestseller": false,
+    "newArrival": false
+  },
+  {
+    "id": 18,
+    "articleNumber": "AB-1312",
+    "title": "Emotional Palette",
+    "description": "Gallery-quality piece that adds sophistication to any collection.",
+    "artistName": "Randy Liu",
+    "artistBio": "Modern expressionist painter",
+    "price": 798,
+    "dimensions": {
+      "width": 40,
+      "height": 40,
+      "depth": 2.5
+    },
+    "imageUrl": "/artworks/AB-1312-RL-40x40x2.5.jpg",
+    "category": "Painting",
+    "featured": false,
+    "bestseller": false,
+    "newArrival": false
+  },
+  {
+    "id": 19,
+    "articleNumber": "AB-1334",
+    "title": "Abstract Resonance",
+    "description": "This original artwork showcases the artist's unique creative vision.",
+    "artistName": "Randy Liu",
+    "artistBio": "Modern expressionist painter",
+    "price": 698,
+    "dimensions": {
+      "width": 36,
+      "height": 36,
+      "depth": 1.5
+    },
+    "imageUrl": "/artworks/AB-1334-RD-36x36x1.5_Smooth-v2_2K_2442x2442.jpg",
+    "category": "Painting",
+    "featured": false,
+    "bestseller": true,
+    "newArrival": false
+  },
+  {
+    "id": 20,
+    "articleNumber": "AB-1345",
+    "title": "Abstract Harmony",
+    "description": "This original artwork showcases the artist's unique creative vision.",
+    "artistName": "Liu Cheng Yong",
+    "artistBio": "Contemporary abstract artist",
+    "price": 1098,
+    "dimensions": {
+      "width": 48,
+      "height": 48,
+      "depth": 2.5
+    },
+    "imageUrl": "/artworks/AB-1345-LCY-48x48x2.5.jpg",
+    "category": "Painting",
+    "featured": false,
+    "bestseller": false,
+    "newArrival": false
+  },
+  {
+    "id": 21,
+    "articleNumber": "AB-1355",
+    "title": "Colorful Meditation",
+    "description": "A stunning abstract piece that captures the essence of modern art.",
+    "artistName": "Liu Cheng Yong",
+    "artistBio": "Contemporary abstract artist",
+    "price": 998,
+    "dimensions": {
+      "width": 40,
+      "height": 60,
+      "depth": 1.5
+    },
+    "imageUrl": "/artworks/AB-1355-LCY-40x60x1.5.jpg",
+    "category": "Painting",
+    "featured": false,
+    "bestseller": false,
+    "newArrival": true
+  },
+  {
+    "id": 22,
+    "articleNumber": "AB-1356",
+    "title": "Chromatic Dance",
+    "description": "A perfect blend of traditional technique and modern expression.",
+    "artistName": "Liu Cheng Yong",
+    "artistBio": "Contemporary abstract artist",
+    "price": 998,
+    "dimensions": {
+      "width": 40,
+      "height": 60,
+      "depth": 1.5
+    },
+    "imageUrl": "/artworks/AB-1356-LCY-40x60x1.5.jpg",
+    "category": "Painting",
+    "featured": false,
+    "bestseller": true,
+    "newArrival": true
+  },
+  {
+    "id": 23,
+    "articleNumber": "AB-1367",
+    "title": "Artistic Journey",
+    "description": "Gallery-quality piece that adds sophistication to any collection.",
+    "artistName": "Randy Liu",
+    "artistBio": "Modern expressionist painter",
+    "price": 898,
+    "dimensions": {
+      "width": 22,
+      "height": 72,
+      "depth": 1.5
+    },
+    "imageUrl": "/artworks/AB-1367-RL-22x72x1.5.jpg",
+    "category": "Painting",
+    "featured": false,
+    "bestseller": false,
+    "newArrival": true
+  },
+  {
+    "id": 24,
+    "articleNumber": "AB-1393",
+    "title": "Artistic Journey",
+    "description": "A stunning abstract piece that captures the essence of modern art.",
+    "artistName": "Randy Liu",
+    "artistBio": "Modern expressionist painter",
+    "price": 1098,
+    "dimensions": {
+      "width": 48,
+      "height": 48,
+      "depth": 2.5
+    },
+    "imageUrl": "/artworks/AB-1393-RL-48x48x2.5.jpg",
+    "category": "Painting",
+    "featured": false,
+    "bestseller": false,
+    "newArrival": true
+  },
+  {
+    "id": 25,
+    "articleNumber": "AB-1394",
+    "title": "Colorful Meditation",
+    "description": "A perfect blend of traditional technique and modern expression.",
+    "artistName": "Randy Liu",
+    "artistBio": "Modern expressionist painter",
+    "price": 1098,
+    "dimensions": {
+      "width": 48,
+      "height": 48,
+      "depth": 2.5
+    },
+    "imageUrl": "/artworks/AB-1394-RL-48x48x2.5.jpg",
+    "category": "Painting",
+    "featured": false,
+    "bestseller": true,
+    "newArrival": true
+  },
+  {
+    "id": 26,
+    "articleNumber": "AB-1405",
+    "title": "Radiant Composition",
+    "description": "A perfect blend of traditional technique and modern expression.",
+    "artistName": "Liu Cheng Yong",
+    "artistBio": "Contemporary abstract artist",
+    "price": 698,
+    "dimensions": {
+      "width": 40,
+      "height": 40,
+      "depth": 1.5
+    },
+    "imageUrl": "/artworks/AB-1405-LCY-40x40x1.5.jpg",
+    "category": "Painting",
+    "featured": false,
+    "bestseller": false,
+    "newArrival": true
+  },
+  {
+    "id": 27,
+    "articleNumber": "AB-1406",
+    "title": "Vivid Imagination",
+    "description": "A stunning abstract piece that captures the essence of modern art.",
+    "artistName": "Liu Cheng Yong",
+    "artistBio": "Contemporary abstract artist",
+    "price": 698,
+    "dimensions": {
+      "width": 40,
+      "height": 40,
+      "depth": 1.5
+    },
+    "imageUrl": "/artworks/AB-1406-LCY-40x40x1.5.jpg",
+    "category": "Painting",
+    "featured": false,
+    "bestseller": false,
+    "newArrival": true
+  },
+  {
+    "id": 28,
+    "articleNumber": "AB-1407",
+    "title": "Modern Essence",
+    "description": "This contemporary masterpiece brings energy and life to any space.",
+    "artistName": "Liu Cheng Yong",
+    "artistBio": "Contemporary abstract artist",
+    "price": 998,
+    "dimensions": {
+      "width": 22,
+      "height": 72,
+      "depth": 2.5
+    },
+    "imageUrl": "/artworks/AB-1407-LCY-22x72x2.5X2.5.jpg",
+    "category": "Painting",
+    "featured": false,
+    "bestseller": true,
+    "newArrival": true
+  },
+  {
+    "id": 29,
+    "articleNumber": "AB-1408",
+    "title": "Modern Movements",
+    "description": "This original artwork showcases the artist's unique creative vision.",
+    "artistName": "Liu Cheng Yong",
+    "artistBio": "Contemporary abstract artist",
+    "price": 998,
+    "dimensions": {
+      "width": 22,
+      "height": 72,
+      "depth": 2.5
+    },
+    "imageUrl": "/artworks/AB-1408-LCY-22x72x2.5.jpg",
+    "category": "Painting",
+    "featured": false,
+    "bestseller": false,
+    "newArrival": true
+  },
+  {
+    "id": 30,
+    "articleNumber": "AB-1423",
+    "title": "Colorful Meditation",
+    "description": "Bold colors and dynamic composition create an unforgettable visual experience.",
+    "artistName": "Liu Cheng Yong",
+    "artistBio": "Contemporary abstract artist",
+    "price": 498,
+    "dimensions": {
+      "width": 32,
+      "height": 32,
+      "depth": 1.5
+    },
+    "imageUrl": "/artworks/AB-1423-LCY-32x32x1.5.jpg",
+    "category": "Painting",
+    "featured": false,
+    "bestseller": false,
+    "newArrival": true
+  }
+]

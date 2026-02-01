@@ -1,0 +1,517 @@
+"use client";
+
+import { useState } from 'react';
+import Link from 'next/link';
+import Image from 'next/image';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Label } from '@/components/ui/label';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
+import { Camera, CreditCard, ArrowRight, ArrowLeft, CheckCircle2 } from 'lucide-react';
+
+const STEPS = [
+    { number: 1, label: 'Personal Info', id: 'personal' },
+    { number: 2, label: 'Choose Plan', id: 'plan' },
+    { number: 3, label: 'Your Art', id: 'art' },
+    { number: 4, label: 'Your Story', id: 'story' },
+    { number: 5, label: 'Social', id: 'social' },
+    { number: 6, label: 'Payments', id: 'payments' },
+];
+
+const LANGUAGES = ['English', 'German', 'Spanish', 'French', 'Italian', 'Portuguese', 'Chinese', 'Japanese'];
+
+export default function ArtistOnboardingPage() {
+    const [currentStep, setCurrentStep] = useState(1);
+    const [profilePhoto, setProfilePhoto] = useState<string | null>(null);
+    const [selectedPlan, setSelectedPlan] = useState('deluxe'); // Default to DeLuxe plan
+    const [formData, setFormData] = useState({
+        firstName: '',
+        lastName: '',
+        displayName: '',
+        email: '',
+        city: '',
+        state: '',
+        country: 'United States',
+        languages: ['English'],
+        bio: '',
+        experience: '',
+        widthRange: '',
+        heightRange: '',
+        priceRange: '',
+        acceptsCommissions: '',
+    });
+
+    const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setProfilePhoto(reader.result as string);
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+
+    const toggleLanguage = (lang: string) => {
+        setFormData(prev => ({
+            ...prev,
+            languages: prev.languages.includes(lang)
+                ? prev.languages.filter(l => l !== lang)
+                : [...prev.languages, lang]
+        }));
+    };
+
+    const canProgress = () => {
+        // Simple validation - you can expand this
+        if (currentStep === 1) {
+            return formData.firstName && formData.lastName && formData.email && formData.city && formData.country;
+        }
+        return true;
+    };
+
+    const handleNext = () => {
+        if (currentStep < 6) setCurrentStep(currentStep + 1);
+    };
+
+    const handleBack = () => {
+        if (currentStep > 1) setCurrentStep(currentStep - 1);
+    };
+
+    const handleComplete = () => {
+        alert('Onboarding complete! Redirecting to dashboard...');
+        // TODO: Submit data to API and navigate to dashboard
+    };
+
+    return (
+        <div className="min-h-screen bg-gray-50 py-12">
+            <div className="container px-4 max-w-4xl mx-auto">
+                {/* Header */}
+                <div className="text-center mb-12">
+                    <h1 className="text-4xl font-bold mb-2">Tell Us Your Story</h1>
+                    <p className="text-gray-600">
+                        Complete your profile so we can create an AI-powered biography and help collectors discover you.
+                    </p>
+                </div>
+
+                {/* Progress Indicator */}
+                <div className="mb-12">
+                    <div className="flex items-center justify-between relative">
+                        {/* Progress Line */}
+                        <div className="absolute top-1/2 left-0 right-0 h-1 bg-gray-300 -translate-y-1/2 z-0">
+                            <div
+                                className="h-full bg-primary transition-all duration-300"
+                                style={{ width: `${((currentStep - 1) / (STEPS.length - 1)) * 100}%` }}
+                            ></div>
+                        </div>
+
+                        {/* Step Circles */}
+                        {STEPS.map((step) => (
+                            <div key={step.number} className="flex flex-col items-center relative z-10">
+                                <div
+                                    className={`w-12 h-12 rounded-full flex items-center justify-center font-bold text-lg transition-colors ${step.number < currentStep
+                                        ? 'bg-green-500 text-white'
+                                        : step.number === currentStep
+                                            ? 'bg-primary text-white'
+                                            : 'bg-gray-300 text-gray-600'
+                                        }`}
+                                >
+                                    {step.number < currentStep ? <CheckCircle2 className="h-6 w-6" /> : step.number}
+                                </div>
+                                <span className={`mt-2 text-xs font-medium ${step.number === currentStep ? 'text-primary' : 'text-gray-600'}`}>
+                                    {step.label}
+                                </span>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+
+                {/* Step Content */}
+                <div className="bg-white rounded-lg shadow-lg p-8 mb-8">
+                    {/* Step 1: Personal Info */}
+                    {currentStep === 1 && (
+                        <div className="space-y-6">
+                            <div className="flex items-center gap-3 pb-4 border-b">
+                                <div className="h-12 w-12 rounded-full bg-blue-100 flex items-center justify-center">
+                                    <Camera className="h-6 w-6 text-blue-600" />
+                                </div>
+                                <div>
+                                    <h2 className="text-2xl font-bold">Personal Information</h2>
+                                    <p className="text-gray-600">Let's start with the basics. This info appears on your public artist profile.</p>
+                                </div>
+                            </div>
+
+                            {/* Profile Photo */}
+                            <div className="bg-gray-50 p-6 rounded-lg">
+                                <Label className="text-lg font-semibold mb-3 block">Profile Photo</Label>
+                                <p className="text-sm text-gray-600 mb-4">A professional headshot helps collectors connect with you</p>
+                                <div className="flex items-center gap-6">
+                                    <div className="relative">
+                                        <div className="h-24 w-24 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden">
+                                            {profilePhoto ? (
+                                                <Image src={profilePhoto} alt="Profile" fill className="object-cover" />
+                                            ) : (
+                                                <Camera className="h-8 w-8 text-gray-400" />
+                                            )}
+                                        </div>
+                                    </div>
+                                    <label>
+                                        <input type="file" accept="image/*" onChange={handlePhotoUpload} className="hidden" />
+                                        <Button type="button" variant="outline" asChild>
+                                            <span>Upload Photo</span>
+                                        </Button>
+                                    </label>
+                                </div>
+                            </div>
+
+                            {/* Name Fields */}
+                            <div className="grid grid-cols-2 gap-4">
+                                <div>
+                                    <Label htmlFor="firstName">First Name *</Label>
+                                    <Input
+                                        id="firstName"
+                                        placeholder="Maria"
+                                        value={formData.firstName}
+                                        onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
+                                    />
+                                </div>
+                                <div>
+                                    <Label htmlFor="lastName">Last Name *</Label>
+                                    <Input
+                                        id="lastName"
+                                        placeholder="Rodriguez"
+                                        value={formData.lastName}
+                                        onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
+                                    />
+                                </div>
+                            </div>
+
+                            <div className="grid grid-cols-2 gap-4">
+                                <div>
+                                    <Label htmlFor="displayName">Display Name (Artist Name)</Label>
+                                    <Input
+                                        id="displayName"
+                                        placeholder="e.g., M. Rodriguez or leave blank for full name"
+                                        value={formData.displayName}
+                                        onChange={(e) => setFormData({ ...formData, displayName: e.target.value })}
+                                    />
+                                </div>
+                                <div>
+                                    <Label htmlFor="email">Email Address *</Label>
+                                    <Input
+                                        id="email"
+                                        type="email"
+                                        placeholder="maria@example.com"
+                                        value={formData.email}
+                                        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                                    />
+                                </div>
+                            </div>
+
+                            {/* Location */}
+                            <div className="grid grid-cols-3 gap-4">
+                                <div>
+                                    <Label htmlFor="city">City *</Label>
+                                    <Input
+                                        id="city"
+                                        placeholder="Los Angeles"
+                                        value={formData.city}
+                                        onChange={(e) => setFormData({ ...formData, city: e.target.value })}
+                                    />
+                                </div>
+                                <div>
+                                    <Label htmlFor="state">State/Province</Label>
+                                    <Input
+                                        id="state"
+                                        placeholder="California"
+                                        value={formData.state}
+                                        onChange={(e) => setFormData({ ...formData, state: e.target.value })}
+                                    />
+                                </div>
+                                <div>
+                                    <Label htmlFor="country">Country *</Label>
+                                    <Select value={formData.country} onValueChange={(value) => setFormData({ ...formData, country: value })}>
+                                        <SelectTrigger>
+                                            <SelectValue />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="United States">United States</SelectItem>
+                                            <SelectItem value="Canada">Canada</SelectItem>
+                                            <SelectItem value="United Kingdom">United Kingdom</SelectItem>
+                                            <SelectItem value="Germany">Germany</SelectItem>
+                                            <SelectItem value="France">France</SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                </div>
+                            </div>
+
+                            {/* Languages */}
+                            <div>
+                                <Label>Languages You Speak</Label>
+                                <div className="flex flex-wrap gap-2 mt-2">
+                                    {LANGUAGES.map((lang) => (
+                                        <button
+                                            key={lang}
+                                            type="button"
+                                            onClick={() => toggleLanguage(lang)}
+                                            className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${formData.languages.includes(lang)
+                                                ? 'bg-primary text-white'
+                                                : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                                                }`}
+                                        >
+                                            {lang}
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* Step 2: Choose Plan */}
+                    {currentStep === 2 && (
+                        <div className="space-y-6">
+                            <div className="text-center pb-4 border-b">
+                                <h2 className="text-2xl font-bold mb-2">Choose Your Membership Plan</h2>
+                                <p className="text-gray-600">Select the plan that fits your creative journey. You can upgrade or downgrade anytime.</p>
+                            </div>
+
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                                {/* Starter Plan */}
+                                <button
+                                    type="button"
+                                    onClick={() => setSelectedPlan('starter')}
+                                    className={`text-left p-5 rounded-xl border-2 transition-all ${selectedPlan === 'starter'
+                                            ? 'border-primary bg-primary/5 shadow-lg'
+                                            : 'border-gray-200 hover:border-gray-300'
+                                        }`}
+                                >
+                                    <div className="flex items-center justify-between mb-3">
+                                        <div className="text-xs font-semibold text-gray-500 uppercase">FREE</div>
+                                        {selectedPlan === 'starter' && <CheckCircle2 className="h-5 w-5 text-primary" />}
+                                    </div>
+                                    <div className="text-2xl font-bold mb-1">Starter</div>
+                                    <div className="mb-3">
+                                        <span className="text-3xl font-bold">$0</span>
+                                        <span className="text-gray-500">/month</span>
+                                    </div>
+                                    <ul className="space-y-2 text-sm text-gray-600">
+                                        <li>• 10 artwork listings</li>
+                                        <li>• 3 images per artwork</li>
+                                        <li>• 10% commission</li>
+                                    </ul>
+                                </button>
+
+                                {/* Superior Plan */}
+                                <button
+                                    type="button"
+                                    onClick={() => setSelectedPlan('superior')}
+                                    className={`text-left p-5 rounded-xl border-2 transition-all ${selectedPlan === 'superior'
+                                            ? 'border-primary bg-primary/5 shadow-lg'
+                                            : 'border-gray-200 hover:border-gray-300'
+                                        }`}
+                                >
+                                    <div className="flex items-center justify-between mb-3">
+                                        <div className="text-xs font-semibold text-gray-500 uppercase">VALUE</div>
+                                        {selectedPlan === 'superior' && <CheckCircle2 className="h-5 w-5 text-primary" />}
+                                    </div>
+                                    <div className="text-2xl font-bold mb-1">Superior</div>
+                                    <div className="mb-3">
+                                        <span className="text-3xl font-bold">$9</span>
+                                        <span className="text-gray-500">/month</span>
+                                    </div>
+                                    <ul className="space-y-2 text-sm text-gray-600">
+                                        <li>• 100 artwork listings</li>
+                                        <li>• 8 images per artwork</li>
+                                        <li>• 0% commission</li>
+                                    </ul>
+                                </button>
+
+                                {/* DeLuxe Plan */}
+                                <button
+                                    type="button"
+                                    onClick={() => setSelectedPlan('deluxe')}
+                                    className={`text-left p-5 rounded-xl border-2 relative transition-all ${selectedPlan === 'deluxe'
+                                            ? 'border-primary bg-primary shadow-lg text-white scale-105'
+                                            : 'border-primary/50 hover:border-primary'
+                                        }`}
+                                >
+                                    <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-yellow-400 text-gray-900 px-3 py-1 rounded-full text-xs font-bold">
+                                        RECOMMENDED
+                                    </div>
+                                    <div className="flex items-center justify-between mb-3">
+                                        <div className={`text-xs font-semibold uppercase ${selectedPlan === 'deluxe' ? 'text-white/80' : 'text-gray-500'}`}>DELUXE</div>
+                                        {selectedPlan === 'deluxe' && <CheckCircle2 className="h-5 w-5" />}
+                                    </div>
+                                    <div className="text-2xl font-bold mb-1">DeLuxe</div>
+                                    <div className="mb-3">
+                                        <span className="text-3xl font-bold">$19</span>
+                                        <span className={selectedPlan === 'deluxe' ? 'text-white/80' : 'text-gray-500'}>/month</span>
+                                    </div>
+                                    <ul className={`space-y-2 text-sm ${selectedPlan === 'deluxe' ? 'text-white/90' : 'text-gray-600'}`}>
+                                        <li>• 200 artwork listings</li>
+                                        <li>• 12 images per artwork</li>
+                                        <li>• 0% commission</li>
+                                        <li>• Artist Blog included</li>
+                                    </ul>
+                                </button>
+
+                                {/* Professional Plan */}
+                                <button
+                                    type="button"
+                                    onClick={() => setSelectedPlan('professional')}
+                                    className={`text-left p-5 rounded-xl border-2 transition-all ${selectedPlan === 'professional'
+                                            ? 'border-primary bg-primary/5 shadow-lg'
+                                            : 'border-gray-200 hover:border-gray-300'
+                                        }`}
+                                >
+                                    <div className="flex items-center justify-between mb-3">
+                                        <div className="text-xs font-semibold text-gray-500 uppercase">PRO</div>
+                                        {selectedPlan === 'professional' && <CheckCircle2 className="h-5 w-5 text-primary" />}
+                                    </div>
+                                    <div className="text-2xl font-bold mb-1">Professional</div>
+                                    <div className="mb-3">
+                                        <span className="text-3xl font-bold">$29</span>
+                                        <span className="text-gray-500">/month</span>
+                                    </div>
+                                    <ul className="space-y-2 text-sm text-gray-600">
+                                        <li>• 500 artwork listings</li>
+                                        <li>• 15 images per artwork</li>
+                                        <li>• 0% commission</li>
+                                        <li>• Priority support</li>
+                                    </ul>
+                                </button>
+
+                                {/* TopTier Plan */}
+                                <button
+                                    type="button"
+                                    onClick={() => setSelectedPlan('toptier')}
+                                    className={`text-left p-5 rounded-xl border-2 transition-all ${selectedPlan === 'toptier'
+                                            ? 'border-primary bg-primary/5 shadow-lg'
+                                            : 'border-gray-200 hover:border-gray-300'
+                                        }`}
+                                >
+                                    <div className="flex items-center justify-between mb-3">
+                                        <div className="text-xs font-semibold text-primary uppercase">ELITE</div>
+                                        {selectedPlan === 'toptier' && <CheckCircle2 className="h-5 w-5 text-primary" />}
+                                    </div>
+                                    <div className="text-2xl font-bold mb-1">TopTier</div>
+                                    <div className="mb-3">
+                                        <span className="text-3xl font-bold">$49</span>
+                                        <span className="text-gray-500">/month</span>
+                                    </div>
+                                    <ul className="space-y-2 text-sm text-gray-600">
+                                        <li>• 1000 artwork listings</li>
+                                        <li>• 20 images per artwork</li>
+                                        <li>• 0% commission</li>
+                                        <li>• Homepage featured</li>
+                                    </ul>
+                                </button>
+                            </div>
+
+                            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 text-sm text-blue-800">
+                                <strong>Free 14-day trial on all paid plans!</strong> You can change or cancel your plan anytime.
+                            </div>
+                        </div>
+                    )}
+
+                    {/* Step 3-5: Placeholder for other steps */}
+                    {currentStep >= 3 && currentStep <= 5 && (
+                        <div className="text-center py-12">
+                            <h2 className="text-2xl font-bold mb-4">{STEPS[currentStep - 1].label}</h2>
+                            <p className="text-gray-600 mb-8">This step content will be implemented based on the design specs.</p>
+                            <p className="text-sm text-gray-500">For now, click Continue to proceed to the next step.</p>
+                        </div>
+                    )}
+
+                    {/* Step 6: Payment Setup */}
+                    {currentStep === 6 && (
+                        <div className="space-y-6">
+                            <div className="flex items-center gap-3 pb-4 border-b">
+                                <div className="h-12 w-12 rounded-full bg-purple-100 flex items-center justify-center">
+                                    <CreditCard className="h-6 w-6 text-purple-600" />
+                                </div>
+                                <div>
+                                    <h2 className="text-2xl font-bold">Payment Setup</h2>
+                                    <p className="text-gray-600">Connect your Stripe account to receive payments directly from collectors.</p>
+                                </div>
+                            </div>
+
+                            {/* Stripe Connect Card */}
+                            <div className="bg-gradient-to-br from-indigo-600 to-purple-700 rounded-xl p-8 text-white">
+                                <div className="flex items-center gap-3 mb-4">
+                                    <span className="text-4xl">💳</span>
+                                    <h3 className="text-2xl font-bold">Stripe Connect</h3>
+                                </div>
+                                <p className="mb-6 text-indigo-100">
+                                    We use Stripe Connect so you get paid directly—we never touch your money. After a buyer confirms receipt (7-30 days), funds go straight to your bank account.
+                                </p>
+                                <Button variant="secondary" size="lg" className="bg-white text-indigo-600 hover:bg-gray-100">
+                                    Connect with Stripe →
+                                </Button>
+                            </div>
+
+                            {/* Additional Payment Info */}
+                            <div className="grid grid-cols-3 gap-4">
+                                <div className="bg-gray-50 p-4 rounded-lg text-center">
+                                    <div className="text-3xl mb-2">🔒</div>
+                                    <div className="font-semibold mb-1">Secure SSL</div>
+                                    <div className="text-xs text-gray-600">Bank-level security</div>
+                                </div>
+                                <div className="bg-gray-50 p-4 rounded-lg text-center">
+                                    <div className="text-3xl mb-2">⚡</div>
+                                    <div className="font-semibold mb-1">Fast Payouts</div>
+                                    <div className="text-xs text-gray-600">7-30 day hold period</div>
+                                </div>
+                                <div className="bg-gray-50 p-4 rounded-lg text-center">
+                                    <div className="text-3xl mb-2">🎯</div>
+                                    <div className="font-semibold mb-1">0% Platform Fee</div>
+                                    <div className="text-xs text-gray-600">Keep 100% of your sales</div>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+                </div>
+
+                {/* Navigation Buttons */}
+                <div className="flex justify-between items-center">
+                    <Button
+                        variant="outline"
+                        onClick={handleBack}
+                        disabled={currentStep === 1}
+                        className="h-12 px-8"
+                    >
+                        <ArrowLeft className="mr-2 h-4 w-4" />
+                        Back
+                    </Button>
+
+                    {currentStep < 6 ? (
+                        <Button
+                            onClick={handleNext}
+                            disabled={!canProgress()}
+                            className="h-12 px-8"
+                        >
+                            Continue
+                            <ArrowRight className="ml-2 h-4 w-4" />
+                        </Button>
+                    ) : (
+                        <Button onClick={handleComplete} className="h-12 px-8 bg-green-600 hover:bg-green-700">
+                            Complete Profile
+                            <CheckCircle2 className="ml-2 h-4 w-4" />
+                        </Button>
+                    )}
+                </div>
+
+                {/* Helper Text */}
+                <div className="mt-8 text-center text-sm text-gray-600">
+                    <p>Already have an account? <Link href="/login/artist" className="text-primary font-semibold hover:underline">Sign in here</Link></p>
+                </div>
+            </div>
+        </div>
+    );
+}
