@@ -516,8 +516,135 @@ export default function ArtistOnboardingPage() {
                         </div>
                     )}
 
-                    {/* Step 3-5: Placeholder for other steps */}
-                    {currentStep >= 3 && currentStep <= 5 && (
+                    {/* Step 3: Your Art - Placeholder */}
+                    {currentStep === 3 && (
+                        <div className="text-center py-12">
+                            <h2 className="text-2xl font-bold mb-4">{STEPS[currentStep - 1].label}</h2>
+                            <p className="text-gray-600 mb-8">This step content will be implemented based on the design specs.</p>
+                            <p className="text-sm text-gray-500">For now, click Continue to proceed to the next step.</p>
+                        </div>
+                    )}
+
+                    {/* Step 4: Your Story */}
+                    {currentStep === 4 && (
+                        <div className="space-y-6">
+                            <div className="flex items-center gap-3 pb-4 border-b">
+                                <div className="h-12 w-12 rounded-full bg-green-100 flex items-center justify-center">
+                                    <span className="text-2xl">✍️</span>
+                                </div>
+                                <div>
+                                    <h2 className="text-2xl font-bold">Your Story</h2>
+                                    <p className="text-gray-600">Tell collectors about your artistic journey and style</p>
+                                </div>
+                            </div>
+
+                            {/* Artistic Experience */}
+                            <div>
+                                <Label htmlFor="experience">Artistic Experience</Label>
+                                <Input
+                                    id="experience"
+                                    placeholder="e.g., 15 years painting abstract expressionism..."
+                                    value={formData.experience}
+                                    onChange={(e) => setFormData({ ...formData, experience: e.target.value })}
+                                />
+                                <p className="text-xs text-gray-500 mt-1">This helps our AI generate a personalized bio</p>
+                            </div>
+
+                            {/* Biography */}
+                            <div>
+                                <div className="flex items-center justify-between mb-2">
+                                    <Label htmlFor="bio">Artist Biography</Label>
+                                    <Button
+                                        type="button"
+                                        variant="outline"
+                                        size="sm"
+                                        onClick={handleGenerateBio}
+                                        disabled={generatingBio || !formData.experience}
+                                        className="gap-2"
+                                    >
+                                        {generatingBio ? (
+                                            <>
+                                                <Loader2 className="h-4 w-4 animate-spin" />
+                                                Generating...
+                                            </>
+                                        ) : (
+                                            <>
+                                                <span>✨</span>
+                                                Generate AI Bio
+                                            </>
+                                        )}
+                                    </Button>
+                                </div>
+                                <Textarea
+                                    id="bio"
+                                    placeholder="Tell your story... or use AI to generate one based on your experience"
+                                    value={formData.bio}
+                                    onChange={(e) => setFormData({ ...formData, bio: e.target.value })}
+                                    rows={8}
+                                    className="resize-none"
+                                />
+                                <p className="text-xs text-gray-500 mt-1">
+                                    A compelling bio helps collectors connect with you and your work
+                                </p>
+                            </div>
+
+                            {/* Additional fields for AI context */}
+                            <div className="grid grid-cols-2 gap-4">
+                                <div>
+                                    <Label htmlFor="widthRange">Typical Width Range</Label>
+                                    <Input
+                                        id="widthRange"
+                                        placeholder="e.g., 24-48 inches"
+                                        value={formData.widthRange}
+                                        onChange={(e) => setFormData({ ...formData, widthRange: e.target.value })}
+                                    />
+                                </div>
+                                <div>
+                                    <Label htmlFor="heightRange">Typical Height Range</Label>
+                                    <Input
+                                        id="heightRange"
+                                        placeholder="e.g., 30-60 inches"
+                                        value={formData.heightRange}
+                                        onChange={(e) => setFormData({ ...formData, heightRange: e.target.value })}
+                                    />
+                                </div>
+                            </div>
+
+                            <div className="grid grid-cols-2 gap-4">
+                                <div>
+                                    <Label htmlFor="priceRange">Price Range</Label>
+                                    <Input
+                                        id="priceRange"
+                                        placeholder="e.g., $500-$5000"
+                                        value={formData.priceRange}
+                                        onChange={(e) => setFormData({ ...formData, priceRange: e.target.value })}
+                                    />
+                                </div>
+                                <div>
+                                    <Label htmlFor="acceptsCommissions">Accept Commissions?</Label>
+                                    <Select value={formData.acceptsCommissions} onValueChange={(value) => setFormData({ ...formData, acceptsCommissions: value })}>
+                                        <SelectTrigger>
+                                            <SelectValue placeholder="Select..." />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="yes">Yes</SelectItem>
+                                            <SelectItem value="no">No</SelectItem>
+                                            <SelectItem value="sometimes">Sometimes</SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                </div>
+                            </div>
+
+                            {error && (
+                                <div className="bg-red-50 border border-red-200 rounded-lg p-3 text-red-700 text-sm">
+                                    {error}
+                                </div>
+                            )}
+                        </div>
+                    )}
+
+                    {/* Step 5: Social - Placeholder */}
+                    {currentStep === 5 && (
                         <div className="text-center py-12">
                             <h2 className="text-2xl font-bold mb-4">{STEPS[currentStep - 1].label}</h2>
                             <p className="text-gray-600 mb-8">This step content will be implemented based on the design specs.</p>
@@ -547,8 +674,21 @@ export default function ArtistOnboardingPage() {
                                 <p className="mb-6 text-indigo-100">
                                     We use Stripe Connect so you get paid directly—we never touch your money. After a buyer confirms receipt (7-30 days), funds go straight to your bank account.
                                 </p>
-                                <Button variant="secondary" size="lg" className="bg-white text-indigo-600 hover:bg-gray-100">
-                                    Connect with Stripe →
+                                <Button
+                                    variant="secondary"
+                                    size="lg"
+                                    className="bg-white text-indigo-600 hover:bg-gray-100"
+                                    onClick={handleStripeConnect}
+                                    disabled={loading}
+                                >
+                                    {loading ? (
+                                        <>
+                                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                            Connecting...
+                                        </>
+                                    ) : (
+                                        'Connect with Stripe →'
+                                    )}
                                 </Button>
                             </div>
 
@@ -570,6 +710,12 @@ export default function ArtistOnboardingPage() {
                                     <div className="text-xs text-gray-600">Keep 100% of your sales</div>
                                 </div>
                             </div>
+
+                            {error && (
+                                <div className="bg-red-50 border border-red-200 rounded-lg p-3 text-red-700 text-sm">
+                                    {error}
+                                </div>
+                            )}
                         </div>
                     )}
                 </div>
