@@ -465,11 +465,11 @@ export default function ArtistOnboardingPage() {
                                         <span className="text-gray-500 text-sm">/month</span>
                                     </div>
                                     <ul className="space-y-1 text-xs text-gray-600">
-                                        <li>✓ 10 artworks</li>
-                                        <li>✓ 3 images/artwork</li>
-                                        <li>✓ Standard template</li>
                                         <li>✓ <strong>0% Commission</strong></li>
-                                        <li>✓ Paid learning tools</li>
+                                        <li>✓ 10 artworks</li>
+                                        <li>✓ 3 images<span className="text-[10px]">/artwork</span></li>
+                                        <li className="flex items-start"><span className="mr-1">✓</span><span>Standard template</span></li>
+                                        <li className="flex items-start"><span className="mr-1">✓</span><span>Paid learning tools</span></li>
                                         <li>✓ STRIPE DIRECT</li>
                                     </ul>
                                 </button>
@@ -493,13 +493,13 @@ export default function ArtistOnboardingPage() {
                                         <span className="text-gray-500 text-sm">/{formData.billingPeriod === 'yearly' ? 'year' : 'month'}</span>
                                     </div>
                                     <ul className="space-y-1 text-xs text-gray-600">
+                                        <li>✓ <strong>0% Commission</strong></li>
                                         <li>✓ 100 artworks</li>
-                                        <li>✓ 8 images/artwork</li>
-                                        <li>✓ Superior template</li>
+                                        <li>✓ 8 images<span className="text-[10px]">/artwork</span></li>
+                                        <li className="flex items-start"><span className="mr-1">✓</span><span>Superior template</span></li>
                                         <li>✓ Artist email</li>
                                         <li>✓ 1GB storage</li>
                                         <li>✓ Social: FB, IG</li>
-                                        <li>✓ <strong>0% Commission</strong></li>
                                     </ul>
                                 </button>
 
@@ -525,15 +525,15 @@ export default function ArtistOnboardingPage() {
                                         <span className={`text-sm ${selectedPlan === 'deluxe' ? 'text-white/80' : 'text-gray-500'}`}>/{formData.billingPeriod === 'yearly' ? 'year' : 'month'}</span>
                                     </div>
                                     <ul className={`space-y-1 text-xs ${selectedPlan === 'deluxe' ? 'text-white/90' : 'text-gray-600'}`}>
+                                        <li>✓ <strong>0% Commission</strong></li>
                                         <li>✓ 200 artworks</li>
-                                        <li>✓ 12 images/artwork</li>
-                                        <li>✓ DeLuxe template</li>
+                                        <li>✓ 12 images<span className="text-[10px]">/artwork</span></li>
+                                        <li className="flex items-start"><span className="mr-1">✓</span><span>DeLuxe template</span></li>
                                         <li>✓ Artist email</li>
                                         <li>✓ 5GB storage</li>
                                         <li>✓ Artist blog</li>
                                         <li>✓ Social: ALL</li>
-                                        <li>✓ Free learning tools</li>
-                                        <li>✓ <strong>0% Commission</strong></li>
+                                        <li className="flex items-start"><span className="mr-1">✓</span><span>Free learning tools</span></li>
                                     </ul>
                                 </button>
 
@@ -556,15 +556,15 @@ export default function ArtistOnboardingPage() {
                                         <span className="text-gray-500 text-sm">/{formData.billingPeriod === 'yearly' ? 'year' : 'month'}</span>
                                     </div>
                                     <ul className="space-y-1 text-xs text-gray-600">
+                                        <li>✓ <strong>0% Commission</strong></li>
                                         <li>✓ 500 artworks</li>
-                                        <li>✓ 15 images/artwork</li>
-                                        <li>✓ Professional template</li>
+                                        <li>✓ 15 images<span className="text-[10px]">/artwork</span></li>
+                                        <li className="flex items-start"><span className="mr-1">✓</span><span>Professional template</span></li>
                                         <li>✓ Artist email</li>
                                         <li>✓ 10GB storage</li>
                                         <li>✓ Artist blog</li>
                                         <li>✓ Social: ALL</li>
-                                        <li>✓ Event invitations</li>
-                                        <li>✓ <strong>0% Commission</strong></li>
+                                        <li className="flex items-start"><span className="mr-1">✓</span><span>Event invitations</span></li>
                                     </ul>
                                 </button>
 
@@ -587,22 +587,22 @@ export default function ArtistOnboardingPage() {
                                         <span className="text-gray-500 text-sm">/{formData.billingPeriod === 'yearly' ? 'year' : 'month'}</span>
                                     </div>
                                     <ul className="space-y-1 text-xs text-gray-600">
+                                        <li>✓ <strong>0% Commission</strong></li>
                                         <li>✓ 1000 artworks</li>
-                                        <li>✓ 20 images/artwork</li>
-                                        <li>✓ TopTier template</li>
+                                        <li>✓ 20 images<span className="text-[10px]">/artwork</span></li>
+                                        <li className="flex items-start"><span className="mr-1">✓</span><span>TopTier template</span></li>
                                         <li>✓ Artist email</li>
                                         <li>✓ 50GB storage</li>
                                         <li>✓ Artist blog</li>
                                         <li>✓ Social: ALL</li>
-                                        <li>✓ Event invitations</li>
-                                        <li>✓ Homepage featured</li>
-                                        <li>✓ <strong>0% Commission</strong></li>
+                                        <li className="flex items-start"><span className="mr-1">✓</span><span>Event invitations</span></li>
+                                        <li className="flex items-start"><span className="mr-1">✓</span><span>Homepage featured</span></li>
                                     </ul>
                                 </button>
                             </div>
 
-                            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 text-sm text-blue-800">
-                                <strong>All plans include Stripe Direct payments + 0% commission</strong> • You keep 100% of your sales (Stripe processing fees apply: ~2.9% + $0.30)
+                            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 text-xs text-blue-800">
+                                <strong>All plans include Stripe Direct payments from the customer to Stripe and payout after securityhold of 15-18 days directly to the artist - we take 0% commission from you and don't touch your earnings</strong> • You keep 100% of your sales (but Stripe processing fees may apply: at present ~2.9% + $0.30/transaction)
                             </div>
                         </div>
                     )}
