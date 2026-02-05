@@ -1,5 +1,7 @@
+"use client";
 import Link from 'next/link';
 import Image from 'next/image';
+import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { DollarSign, Globe, Shield, Zap, CheckCircle2 } from 'lucide-react';
@@ -309,6 +311,117 @@ export default function SellArtPage() {
 
 // Membership Plans Component
 function MembershipPlansSection() {
+    const [billingPeriod, setBillingPeriod] = useState<'monthly' | 'yearly'>('monthly');
+
+    const tiers = [
+        {
+            name: "Free",
+            label: "START",
+            priceMonthly: 0,
+            priceYearly: 0,
+            artworks: 10,
+            images: 3,
+            template: "Standard",
+            emailAddress: "X",
+            storage: "X",
+            blog: "X",
+            social: "X",
+            learning: "X",
+            paidLearning: "YES",
+            invitations: "X",
+            payment: "STRIPE DIRECT *",
+            commission: "0%",
+            money: "0%",
+            branding: "ART District USA",
+            crossSales: "YES"
+        },
+        {
+            name: "Superior",
+            label: "VALUE",
+            priceMonthly: 9,
+            priceYearly: 90,
+            artworks: 100,
+            images: 8,
+            template: "Superior",
+            emailAddress: "YES",
+            storage: "1GB",
+            blog: "X",
+            social: "FB, IG",
+            learning: "X",
+            paidLearning: "YES",
+            invitations: "X",
+            payment: "STRIPE DIRECT *",
+            commission: "0%",
+            money: "YES +",
+            branding: "No Branding *",
+            crossSales: "NO #"
+        },
+        {
+            name: "DeLuxe",
+            label: "MOST POPULAR",
+            priceMonthly: 19,
+            priceYearly: 190,
+            artworks: 200,
+            images: 12,
+            template: "DeLuxe",
+            emailAddress: "YES",
+            storage: "5GB",
+            blog: "YES",
+            social: "ALL",
+            learning: "YES",
+            paidLearning: "YES",
+            invitations: "X",
+            payment: "STRIPE DIRECT *",
+            commission: "0%",
+            money: "YES +",
+            branding: "No Branding *",
+            crossSales: "NO #",
+            highlighted: true
+        },
+        {
+            name: "Professional",
+            label: "PRO",
+            priceMonthly: 29,
+            priceYearly: 290,
+            artworks: 500,
+            images: 15,
+            template: "Professional",
+            emailAddress: "YES",
+            storage: "10GB",
+            blog: "YES",
+            social: "ALL",
+            learning: "YES",
+            paidLearning: "YES",
+            invitations: "YES",
+            payment: "STRIPE DIRECT *",
+            commission: "0%",
+            money: "YES +",
+            branding: "No Branding *",
+            crossSales: "NO #"
+        },
+        {
+            name: "TopTier",
+            label: "ELITE",
+            priceMonthly: 49,
+            priceYearly: 490,
+            artworks: 1000,
+            images: 20,
+            template: "TopTier",
+            emailAddress: "YES",
+            storage: "50GB",
+            blog: "YES",
+            social: "ALL",
+            learning: "YES",
+            paidLearning: "YES",
+            invitations: "YES",
+            payment: "STRIPE DIRECT *",
+            commission: "0%",
+            money: "YES +",
+            branding: "No Hint at All",
+            crossSales: "No Hint at All"
+        }
+    ];
+
     return (
         <section className="py-20 bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white">
             <div className="container px-4 md:px-8">
@@ -333,199 +446,155 @@ function MembershipPlansSection() {
                     </Button>
                 </div>
 
+                {/* Monthly/Yearly Toggle */}
+                <div className="flex justify-center items-center gap-4 mb-8">
+                    <button
+                        onClick={() => setBillingPeriod('monthly')}
+                        className={`px-6 py-2 rounded-full font-semibold transition ${billingPeriod === 'monthly' ? 'bg-primary text-white' : 'bg-gray-700 text-gray-300 hover:bg-gray-600'}`}
+                    >
+                        Monthly
+                    </button>
+                    <button
+                        onClick={() => setBillingPeriod('yearly')}
+                        className={`px-6 py-2 rounded-full font-semibold transition ${billingPeriod === 'yearly' ? 'bg-primary text-white' : 'bg-gray-700 text-gray-300 hover:bg-gray-600'}`}
+                    >
+                        Yearly <span className="text-xs">(Save 17%)</span>
+                    </button>
+                </div>
+
                 <p className="text-center text-gray-300 mb-12">
                     🎨 Artists are the heart of ARTDistrictUSA. Choose the plan that fits your creative journey.
                 </p>
 
                 {/* Pricing Cards */}
                 <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6 max-w-7xl mx-auto">
-                    {/* Starter - Free */}
-                    <div className="bg-gray-800 rounded-xl p-6 border border-gray-700">
-                        <div className="mb-4">
-                            <div className="text-sm font-semibold text-gray-400 uppercase">FREE</div>
-                            <div className="text-3xl font-bold mt-2">Starter</div>
-                        </div>
-                        <div className="mb-6">
-                            <span className="text-5xl font-bold">$0</span>
-                            <span className="text-gray-400">/month</span>
-                        </div>
-                        <div className="text-sm text-gray-400 mb-6">Just getting started</div>
-                        <ul className="space-y-3 text-sm mb-6">
-                            <li className="flex items-start gap-2">
-                                <CheckCircle2 className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" />
-                                <span>10 artwork listings</span>
-                            </li>
-                            <li className="flex items-start gap-2">
-                                <CheckCircle2 className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" />
-                                <span>3 images per artwork</span>
-                            </li>
-                            <li className="flex items-start gap-2">
-                                <CheckCircle2 className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" />
-                                <span>Standard template</span>
-                            </li>
-                            <li className="flex items-start gap-2">
-                                <CheckCircle2 className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" />
-                                <span>10% platform commission</span>
-                            </li>
-                        </ul>
-                        <Button variant="outline" className="w-full border-gray-600 hover:bg-gray-700">
-                            Get Started
-                        </Button>
-                    </div>
+                    {tiers.map((tier, idx) => {
+                        const price = billingPeriod === 'monthly' ? tier.priceMonthly : tier.priceYearly;
+                        const priceDisplay = billingPeriod === 'monthly' ? `$${tier.priceMonthly}` : `$${tier.priceYearly}`;
+                        const period = billingPeriod === 'monthly' ? '/month' : '/year';
 
-                    {/* Superior - $9 */}
-                    <div className="bg-gray-800 rounded-xl p-6 border border-gray-700">
-                        <div className="mb-4">
-                            <div className="text-sm font-semibold text-gray-400 uppercase">VALUE</div>
-                            <div className="text-3xl font-bold mt-2">Superior</div>
-                        </div>
-                        <div className="mb-6">
-                            <span className="text-5xl font-bold">$9</span>
-                            <span className="text-gray-400">/month</span>
-                        </div>
-                        <div className="text-sm text-gray-400 mb-6">Serious about selling</div>
-                        <ul className="space-y-3 text-sm mb-6">
-                            <li className="flex items-start gap-2">
-                                <CheckCircle2 className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" />
-                                <span>100 artwork listings</span>
-                            </li>
-                            <li className="flex items-start gap-2">
-                                <CheckCircle2 className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" />
-                                <span>8 images per artwork</span>
-                            </li>
-                            <li className="flex items-start gap-2">
-                                <CheckCircle2 className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" />
-                                <span>Superior template</span>
-                            </li>
-                            <li className="flex items-start gap-2">
-                                <CheckCircle2 className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" />
-                                <span>0% platform commission</span>
-                            </li>
-                        </ul>
-                        <Button variant="outline" className="w-full border-gray-600 hover:bg-gray-700">
-                            Start Free Trial
-                        </Button>
-                    </div>
+                        return (
+                            <div
+                                key={idx}
+                                className={`rounded-xl p-6 ${tier.highlighted
+                                    ? 'bg-white text-gray-900 border-4 border-primary relative transform scale-105 shadow-2xl'
+                                    : tier.name === 'TopTier'
+                                        ? 'bg-gray-800 border-2 border-primary'
+                                        : 'bg-gray-800 border border-gray-700'
+                                    }`}
+                            >
+                                {tier.highlighted && (
+                                    <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-primary text-white px-4 py-1 rounded-full text-xs font-bold">
+                                        {tier.label}
+                                    </div>
+                                )}
 
-                    {/* DeLuxe - $19 MOST POPULAR */}
-                    <div className="bg-white text-gray-900 rounded-xl p-6 border-4 border-primary relative transform scale-105 shadow-2xl">
-                        <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-primary text-white px-4 py-1 rounded-full text-xs font-bold">
-                            MOST POPULAR
-                        </div>
-                        <div className="mb-4">
-                            <div className="text-sm font-semibold text-gray-600 uppercase">DeLuxe</div>
-                        </div>
-                        <div className="mb-6">
-                            <span className="text-5xl font-bold">$19</span>
-                            <span className="text-gray-600">/month</span>
-                        </div>
-                        <div className="text-sm text-gray-600 mb-6">Growing your career</div>
-                        <ul className="space-y-3 text-sm mb-6">
-                            <li className="flex items-start gap-2">
-                                <CheckCircle2 className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" />
-                                <span>200 artwork listings</span>
-                            </li>
-                            <li className="flex items-start gap-2">
-                                <CheckCircle2 className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" />
-                                <span>12 images per artwork</span>
-                            </li>
-                            <li className="flex items-start gap-2">
-                                <CheckCircle2 className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" />
-                                <span>DeLuxe template</span>
-                            </li>
-                            <li className="flex items-start gap-2">
-                                <CheckCircle2 className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" />
-                                <span>0% platform commission</span>
-                            </li>
-                            <li className="flex items-start gap-2">
-                                <CheckCircle2 className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" />
-                                <span>Artist Blog included</span>
-                            </li>
-                        </ul>
-                        <Button className="w-full bg-primary hover:bg-primary/90">
-                            Start Free Trial
-                        </Button>
-                    </div>
+                                <div className="mb-4">
+                                    <div className={`text-sm font-semibold uppercase ${tier.highlighted ? 'text-gray-600' : tier.name === 'TopTier' ? 'text-primary' : 'text-gray-400'
+                                        }`}>
+                                        {!tier.highlighted && tier.label}
+                                    </div>
+                                    <div className="text-3xl font-bold mt-2">{tier.name}</div>
+                                </div>
 
-                    {/* Professional - $29 */}
-                    <div className="bg-gray-800 rounded-xl p-6 border border-gray-700">
-                        <div className="mb-4">
-                            <div className="text-sm font-semibold text-gray-400 uppercase">PRO</div>
-                            <div className="text-3xl font-bold mt-2">Professional</div>
-                        </div>
-                        <div className="mb-6">
-                            <span className="text-5xl font-bold">$29</span>
-                            <span className="text-gray-400">/month</span>
-                        </div>
-                        <div className="text-sm text-gray-400 mb-6">Full-time artists</div>
-                        <ul className="space-y-3 text-sm mb-6">
-                            <li className="flex items-start gap-2">
-                                <CheckCircle2 className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" />
-                                <span>500 artwork listings</span>
-                            </li>
-                            <li className="flex items-start gap-2">
-                                <CheckCircle2 className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" />
-                                <span>15 images per artwork</span>
-                            </li>
-                            <li className="flex items-start gap-2">
-                                <CheckCircle2 className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" />
-                                <span>Professional template</span>
-                            </li>
-                            <li className="flex items-start gap-2">
-                                <CheckCircle2 className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" />
-                                <span>0% platform commission</span>
-                            </li>
-                            <li className="flex items-start gap-2">
-                                <CheckCircle2 className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" />
-                                <span>Priority support</span>
-                            </li>
-                        </ul>
-                        <Button variant="outline" className="w-full border-gray-600 hover:bg-gray-700">
-                            Get Started
-                        </Button>
-                    </div>
+                                <div className="mb-6">
+                                    <span className="text-5xl font-bold">{priceDisplay}</span>
+                                    <span className={tier.highlighted ? 'text-gray-600' : 'text-gray-400'}>{period}</span>
+                                </div>
 
-                    {/* TopTier - $49 */}
-                    <div className="bg-gray-800 rounded-xl p-6 border-2 border-primary">
-                        <div className="mb-4">
-                            <div className="text-sm font-semibold text-primary uppercase">ELITE</div>
-                            <div className="text-3xl font-bold mt-2">TopTier</div>
-                        </div>
-                        <div className="mb-6">
-                            <span className="text-5xl font-bold">$49</span>
-                            <span className="text-gray-400">/month</span>
-                        </div>
-                        <div className="text-sm text-gray-400 mb-6">Maximum visibility</div>
-                        <ul className="space-y-3 text-sm mb-6">
-                            <li className="flex items-start gap-2">
-                                <CheckCircle2 className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" />
-                                <span>1000 artwork listings</span>
-                            </li>
-                            <li className="flex items-start gap-2">
-                                <CheckCircle2 className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" />
-                                <span>20 images per artwork</span>
-                            </li>
-                            <li className="flex items-start gap-2">
-                                <CheckCircle2 className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" />
-                                <span>TopTier template</span>
-                            </li>
-                            <li className="flex items-start gap-2">
-                                <CheckCircle2 className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" />
-                                <span>0% platform commission</span>
-                            </li>
-                            <li className="flex items-start gap-2">
-                                <CheckCircle2 className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" />
-                                <span>Homepage featured</span>
-                            </li>
-                        </ul>
-                        <Button variant="outline" className="w-full border-primary text-primary hover:bg-primary/10">
-                            Get Started
-                        </Button>
-                    </div>
+                                <ul className="space-y-2 text-sm mb-6">
+                                    <li className="flex items-start gap-2">
+                                        <CheckCircle2 className={`h-4 w-4 mt-0.5 flex-shrink-0 ${tier.highlighted ? 'text-primary' : 'text-primary'}`} />
+                                        <span><strong>{tier.artworks}</strong> artworks</span>
+                                    </li>
+                                    <li className="flex items-start gap-2">
+                                        <CheckCircle2 className={`h-4 w-4 mt-0.5 flex-shrink-0 ${tier.highlighted ? 'text-primary' : 'text-primary'}`} />
+                                        <span><strong>{tier.images}</strong> images/artwork</span>
+                                    </li>
+                                    <li className="flex items-start gap-2">
+                                        <CheckCircle2 className={`h-4 w-4 mt-0.5 flex-shrink-0 ${tier.highlighted ? 'text-primary' : 'text-primary'}`} />
+                                        <span>{tier.template} template</span>
+                                    </li>
+                                    {tier.emailAddress !== "X" && (
+                                        <li className="flex items-start gap-2">
+                                            <CheckCircle2 className={`h-4 w-4 mt-0.5 flex-shrink-0 ${tier.highlighted ? 'text-primary' : 'text-primary'}`} />
+                                            <span>Artist email address</span>
+                                        </li>
+                                    )}
+                                    {tier.storage !== "X" && (
+                                        <li className="flex items-start gap-2">
+                                            <CheckCircle2 className={`h-4 w-4 mt-0.5 flex-shrink-0 ${tier.highlighted ? 'text-primary' : 'text-primary'}`} />
+                                            <span>{tier.storage} storage</span>
+                                        </li>
+                                    )}
+                                    {tier.blog !== "X" && (
+                                        <li className="flex items-start gap-2">
+                                            <CheckCircle2 className={`h-4 w-4 mt-0.5 flex-shrink-0 ${tier.highlighted ? 'text-primary' : 'text-primary'}`} />
+                                            <span>Artist blog</span>
+                                        </li>
+                                    )}
+                                    {tier.social !== "X" && (
+                                        <li className="flex items-start gap-2">
+                                            <CheckCircle2 className={`h-4 w-4 mt-0.5 flex-shrink-0 ${tier.highlighted ? 'text-primary' : 'text-primary'}`} />
+                                            <span>Social: {tier.social}</span>
+                                        </li>
+                                    )}
+                                    {tier.learning !== "X" && (
+                                        <li className="flex items-start gap-2">
+                                            <CheckCircle2 className={`h-4 w-4 mt-0.5 flex-shrink-0 ${tier.highlighted ? 'text-primary' : 'text-primary'}`} />
+                                            <span>Free learning tools</span>
+                                        </li>
+                                    )}
+                                    <li className="flex items-start gap-2">
+                                        <CheckCircle2 className={`h-4 w-4 mt-0.5 flex-shrink-0 ${tier.highlighted ? 'text-primary' : 'text-primary'}`} />
+                                        <span>Paid learning tools</span>
+                                    </li>
+                                    {tier.invitations !== "X" && (
+                                        <li className="flex items-start gap-2">
+                                            <CheckCircle2 className={`h-4 w-4 mt-0.5 flex-shrink-0 ${tier.highlighted ? 'text-primary' : 'text-primary'}`} />
+                                            <span>Invitation tool for events</span>
+                                        </li>
+                                    )}
+                                    <li className="flex items-start gap-2">
+                                        <CheckCircle2 className={`h-4 w-4 mt-0.5 flex-shrink-0 ${tier.highlighted ? 'text-primary' : 'text-primary'}`} />
+                                        <span className="font-bold text-primary">0% Commission</span>
+                                    </li>
+                                    <li className="flex items-start gap-2">
+                                        <CheckCircle2 className={`h-4 w-4 mt-0.5 flex-shrink-0 ${tier.highlighted ? 'text-primary' : 'text-primary'}`} />
+                                        <span className="text-xs">{tier.payment}</span>
+                                    </li>
+                                    {tier.money !== "0%" && (
+                                        <li className="flex items-start gap-2">
+                                            <CheckCircle2 className={`h-4 w-4 mt-0.5 flex-shrink-0 ${tier.highlighted ? 'text-primary' : 'text-primary'}`} />
+                                            <span className="text-xs">Direct to artist 15-18 days</span>
+                                        </li>
+                                    )}
+                                </ul>
+
+                                <Button
+                                    className={`w-full ${tier.highlighted
+                                        ? 'bg-primary hover:bg-primary/90'
+                                        : tier.name === 'TopTier'
+                                            ? 'border-primary text-primary hover:bg-primary/10'
+                                            : 'border-gray-600 hover:bg-gray-700'
+                                        }`}
+                                    variant={tier.highlighted ? 'default' : 'outline'}
+                                >
+                                    {tier.priceMonthly === 0 ? 'Get Started' : 'Start Free Trial'}
+                                </Button>
+                            </div>
+                        );
+                    })}
                 </div>
 
-                <div className="text-center mt-12 text-gray-400">
-                    <p>All plans include Stripe Direct payments • 0% commission • No hidden fees</p>
+                <div className="text-center mt-12 space-y-2">
+                    <p className="text-gray-400">All plans include Stripe Direct payments • 0% commission • No hidden fees</p>
+                    <p className="text-xs text-gray-500">
+                        * STRIPE DIRECT = Stripe transaction fees 2.9% + $0.30 apply | + Customers pay to Stripe directly 15-18 days after confirmed arrival
+                    </p>
+                    <p className="text-xs text-gray-500">
+                        * No Branding = Just website name and Featured by Button | # Only if Customers get to Site from the Homepage
+                    </p>
                 </div>
             </div>
         </section>
