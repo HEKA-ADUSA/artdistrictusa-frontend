@@ -24,11 +24,6 @@ const howItWorks = [
     }
 ];
 
-export const metadata = {
-    title: "Sell Your Art | 0% Commission | ARTDistrictUSA",
-    description: "Join the art marketplace revolution. ARTDistrictUSA connects artists directly with collectors—no middleman fees, no hidden costs.",
-};
-
 export default function SellArtPage() {
     return (
         <div className="flex flex-col">
