@@ -57,6 +57,7 @@ export default function ArtistOnboardingPage() {
         medium: '',
         bio: '',
         experience: '',
+        bioFile: '',
         widthRange: '',
         heightRange: '',
         priceRange: '',
@@ -750,50 +751,78 @@ export default function ArtistOnboardingPage() {
                                 </div>
                                 <div>
                                     <h2 className="text-2xl font-bold">Your Story</h2>
-                                    <p className="text-gray-600">Tell collectors about your artistic journey and style</p>
+                                    <p className="text-gray-600">Tell collectors about your artistic journey</p>
                                 </div>
                             </div>
 
                             {/* Artistic Experience */}
                             <div>
-                                <Label htmlFor="experience">Artistic Experience</Label>
+                                <Label htmlFor="experience">Artistic Experience & Background</Label>
                                 <Input
                                     id="experience"
-                                    placeholder="e.g., 15 years painting abstract expressionism..."
+                                    placeholder="e.g., 15 years painting abstract expressionism, MFA from NYU..."
                                     value={formData.experience}
                                     onChange={(e) => setFormData({ ...formData, experience: e.target.value })}
                                 />
-                                <p className="text-xs text-gray-500 mt-1">This helps our AI generate a personalized bio</p>
+                                <p className="text-xs text-gray-500 mt-1">Share your training, style evolution, and what inspires your work</p>
                             </div>
 
-                            {/* Biography */}
+                            {/* Biography Options */}
                             <div>
-                                <div className="flex items-center justify-between mb-2">
-                                    <Label htmlFor="bio">Artist Biography</Label>
-                                    <Button
-                                        type="button"
-                                        variant="outline"
-                                        size="sm"
-                                        onClick={handleGenerateBio}
-                                        disabled={generatingBio || !formData.experience}
-                                        className="gap-2"
-                                    >
-                                        {generatingBio ? (
-                                            <>
-                                                <Loader2 className="h-4 w-4 animate-spin" />
-                                                Generating...
-                                            </>
-                                        ) : (
-                                            <>
-                                                <span>✨</span>
-                                                Generate AI Bio
-                                            </>
-                                        )}
-                                    </Button>
+                                <Label className="mb-3 block">Artist Biography</Label>
+
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                                    {/* Option 1: Write Your Own */}
+                                    <div className="border-2 border-gray-200 rounded-lg p-4 hover:border-primary/50 transition-colors">
+                                        <div className="flex items-start gap-3">
+                                            <div className="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
+                                                <span className="text-lg">✏️</span>
+                                            </div>
+                                            <div className="flex-1">
+                                                <h3 className="font-semibold text-sm mb-1">Write Your Own</h3>
+                                                <p className="text-xs text-gray-600">Craft your biography from scratch</p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {/* Option 2: Generate with AI */}
+                                    <div className="border-2 border-gray-200 rounded-lg p-4 hover:border-primary/50 transition-colors">
+                                        <div className="flex items-start gap-3">
+                                            <div className="h-10 w-10 rounded-full bg-purple-100 flex items-center justify-center flex-shrink-0">
+                                                <span className="text-lg">✨</span>
+                                            </div>
+                                            <div className="flex-1">
+                                                <h3 className="font-semibold text-sm mb-1">Generate with AI</h3>
+                                                <p className="text-xs text-gray-600 mb-2">Let AI create a professional bio</p>
+                                                <Button
+                                                    type="button"
+                                                    variant="outline"
+                                                    size="sm"
+                                                    onClick={handleGenerateBio}
+                                                    disabled={generatingBio || !formData.experience}
+                                                    className="gap-2 w-full"
+                                                >
+                                                    {generatingBio ? (
+                                                        <>
+                                                            <Loader2 className="h-3 w-3 animate-spin" />
+                                                            Generating...
+                                                        </>
+                                                    ) : (
+                                                        <>
+                                                            <span>✨</span>
+                                                            Generate Bio
+                                                        </>
+                                                    )}
+                                                </Button>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
+
+                                {/* Biography Textarea */}
                                 <Textarea
                                     id="bio"
-                                    placeholder="Tell your story... or use AI to generate one based on your experience"
+                                    placeholder="Share your artistic journey, inspirations, and what makes your work unique..."
                                     value={formData.bio}
                                     onChange={(e) => setFormData({ ...formData, bio: e.target.value })}
                                     rows={8}
@@ -804,51 +833,43 @@ export default function ArtistOnboardingPage() {
                                 </p>
                             </div>
 
-                            {/* Additional fields for AI context */}
-                            <div className="grid grid-cols-2 gap-4">
-                                <div>
-                                    <Label htmlFor="widthRange">Typical Width Range</Label>
-                                    <Input
-                                        id="widthRange"
-                                        placeholder="e.g., 24-48 inches"
-                                        value={formData.widthRange}
-                                        onChange={(e) => setFormData({ ...formData, widthRange: e.target.value })}
+                            {/* Biography File Upload */}
+                            <div>
+                                <Label htmlFor="bioFile" className="mb-2 block">Or Upload Biography Document (Optional)</Label>
+                                <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-primary/50 transition-colors">
+                                    <input
+                                        type="file"
+                                        id="bioFile"
+                                        accept=".pdf,.doc,.docx,.png,.jpg,.jpeg"
+                                        className="hidden"
+                                        onChange={(e) => {
+                                            const file = e.target.files?.[0];
+                                            if (file) {
+                                                // Handle file upload - for now just show the filename
+                                                setFormData({ ...formData, bioFile: file.name });
+                                            }
+                                        }}
                                     />
+                                    <label htmlFor="bioFile" className="cursor-pointer">
+                                        <div className="flex flex-col items-center gap-2">
+                                            <div className="h-12 w-12 rounded-full bg-gray-100 flex items-center justify-center">
+                                                <span className="text-2xl">📄</span>
+                                            </div>
+                                            <div>
+                                                <p className="text-sm font-medium text-gray-700">Upload Biography</p>
+                                                <p className="text-xs text-gray-500">PDF, Word, or Image (PNG/JPG)</p>
+                                            </div>
+                                            {formData.bioFile && (
+                                                <p className="text-xs text-green-600 font-medium">
+                                                    ✓ {formData.bioFile}
+                                                </p>
+                                            )}
+                                        </div>
+                                    </label>
                                 </div>
-                                <div>
-                                    <Label htmlFor="heightRange">Typical Height Range</Label>
-                                    <Input
-                                        id="heightRange"
-                                        placeholder="e.g., 30-60 inches"
-                                        value={formData.heightRange}
-                                        onChange={(e) => setFormData({ ...formData, heightRange: e.target.value })}
-                                    />
-                                </div>
-                            </div>
-
-                            <div className="grid grid-cols-2 gap-4">
-                                <div>
-                                    <Label htmlFor="priceRange">Price Range</Label>
-                                    <Input
-                                        id="priceRange"
-                                        placeholder="e.g., $500-$5000"
-                                        value={formData.priceRange}
-                                        onChange={(e) => setFormData({ ...formData, priceRange: e.target.value })}
-                                    />
-                                </div>
-                                <div>
-                                    <Label htmlFor="acceptsCommissions">Accept Commissions?</Label>
-                                    <Select value={formData.acceptsCommissions} onValueChange={(value) => setFormData({ ...formData, acceptsCommissions: value })}>
-                                        <SelectTrigger>
-                                            <SelectValue placeholder="Select..." />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            <SelectItem value="yes">Yes</SelectItem>
-                                            <SelectItem value="no">No</SelectItem>
-                                            <SelectItem value="sometimes">Sometimes</SelectItem>
-                                        </SelectContent>
-                                    </Select>
-                                </div>
+                                <p className="text-xs text-gray-500 mt-2">
+                                    Upload an existing biography document if you have one prepared
+                                </p>
                             </div>
 
                             {error && (
