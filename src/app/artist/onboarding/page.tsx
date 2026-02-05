@@ -66,6 +66,7 @@ export default function ArtistOnboardingPage() {
         instagram: '',
         facebook: '',
         twitter: '',
+        tiktok: '',
     });
 
     // Auto-save form data to localStorage whenever it changes
@@ -964,6 +965,22 @@ export default function ArtistOnboardingPage() {
                                         />
                                     </div>
                                     <p className="text-xs text-gray-500 mt-1">Your Twitter/X handle</p>
+                                </div>
+
+                                {/* TikTok */}
+                                <div>
+                                    <Label htmlFor="tiktok">TikTok (Optional)</Label>
+                                    <div className="relative">
+                                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-900 font-bold text-xs">TT</span>
+                                        <Input
+                                            id="tiktok"
+                                            placeholder="@yourusername"
+                                            value={formData.tiktok}
+                                            onChange={(e) => setFormData({ ...formData, tiktok: e.target.value })}
+                                            className="pl-10"
+                                        />
+                                    </div>
+                                    <p className="text-xs text-gray-500 mt-1">Your TikTok handle</p>
                                 </div>
                             </div>
 
