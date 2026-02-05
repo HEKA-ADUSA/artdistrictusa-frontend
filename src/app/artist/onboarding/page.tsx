@@ -880,12 +880,109 @@ export default function ArtistOnboardingPage() {
                         </div>
                     )}
 
-                    {/* Step 5: Social - Placeholder */}
+                    {/* Step 5: Social & Web Presence */}
                     {currentStep === 5 && (
-                        <div className="text-center py-12">
-                            <h2 className="text-2xl font-bold mb-4">{STEPS[currentStep - 1].label}</h2>
-                            <p className="text-gray-600 mb-8">This step content will be implemented based on the design specs.</p>
-                            <p className="text-sm text-gray-500">For now, click Continue to proceed to the next step.</p>
+                        <div className="space-y-6">
+                            <div className="flex items-center gap-3 pb-4 border-b">
+                                <div className="h-12 w-12 rounded-full bg-blue-100 flex items-center justify-center">
+                                    <span className="text-2xl">🌐</span>
+                                </div>
+                                <div>
+                                    <h2 className="text-2xl font-bold">Social & Web Presence</h2>
+                                    <p className="text-gray-600">Connect your online presence to build credibility</p>
+                                </div>
+                            </div>
+
+                            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                                <p className="text-sm text-blue-800">
+                                    <strong>💡 Optional but Recommended:</strong> Social links and a website help collectors discover more of your work and build trust in your artist profile.
+                                </p>
+                            </div>
+
+                            {/* Website */}
+                            <div>
+                                <Label htmlFor="website">Website (Optional)</Label>
+                                <div className="relative">
+                                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">🌍</span>
+                                    <Input
+                                        id="website"
+                                        type="url"
+                                        placeholder="https://yourartwebsite.com"
+                                        value={formData.website}
+                                        onChange={(e) => setFormData({ ...formData, website: e.target.value })}
+                                        className="pl-10"
+                                    />
+                                </div>
+                                <p className="text-xs text-gray-500 mt-1">Your personal portfolio or artist website</p>
+                            </div>
+
+                            {/* Social Media Grid */}
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                {/* Instagram */}
+                                <div>
+                                    <Label htmlFor="instagram">Instagram (Optional)</Label>
+                                    <div className="relative">
+                                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-pink-500 font-semibold">IG</span>
+                                        <Input
+                                            id="instagram"
+                                            placeholder="@yourusername"
+                                            value={formData.instagram}
+                                            onChange={(e) => setFormData({ ...formData, instagram: e.target.value })}
+                                            className="pl-10"
+                                        />
+                                    </div>
+                                    <p className="text-xs text-gray-500 mt-1">Your Instagram handle</p>
+                                </div>
+
+                                {/* Facebook */}
+                                <div>
+                                    <Label htmlFor="facebook">Facebook (Optional)</Label>
+                                    <div className="relative">
+                                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-blue-600 font-semibold">FB</span>
+                                        <Input
+                                            id="facebook"
+                                            placeholder="yourpage or profile URL"
+                                            value={formData.facebook}
+                                            onChange={(e) => setFormData({ ...formData, facebook: e.target.value })}
+                                            className="pl-10"
+                                        />
+                                    </div>
+                                    <p className="text-xs text-gray-500 mt-1">Your Facebook page or profile</p>
+                                </div>
+
+                                {/* Twitter */}
+                                <div>
+                                    <Label htmlFor="twitter">Twitter / X (Optional)</Label>
+                                    <div className="relative">
+                                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-700 font-semibold">𝕏</span>
+                                        <Input
+                                            id="twitter"
+                                            placeholder="@yourusername"
+                                            value={formData.twitter}
+                                            onChange={(e) => setFormData({ ...formData, twitter: e.target.value })}
+                                            className="pl-10"
+                                        />
+                                    </div>
+                                    <p className="text-xs text-gray-500 mt-1">Your Twitter/X handle</p>
+                                </div>
+                            </div>
+
+                            {/* Info Banner */}
+                            <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
+                                <h3 className="font-semibold text-sm mb-2">📱 Why Add Social Links?</h3>
+                                <ul className="text-xs text-gray-600 space-y-1">
+                                    <li>• Helps collectors see your artistic journey and process</li>
+                                    <li>• Builds trust and authenticity for your artist profile</li>
+                                    <li>• Increases your visibility in our artist community</li>
+                                    <li>• You can always update these later in your account settings</li>
+                                </ul>
+                            </div>
+
+                            {error && (
+                                <div className="bg-red-50 border border-red-200 rounded-lg p-3 text-red-700 text-sm">
+                                    {error}
+                                </div>
+                            )}
                         </div>
                     )}
 
