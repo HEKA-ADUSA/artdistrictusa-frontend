@@ -39,10 +39,12 @@ export default function ArtistOnboardingPage() {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [generatingBio, setGeneratingBio] = useState(false);
+    const [dataConsent, setDataConsent] = useState(false);
     const [formData, setFormData] = useState({
         firstName: '',
         lastName: '',
         displayName: '',
+        phone: '',
         email: '',
         streetAddress: '',
         city: '',
@@ -61,6 +63,15 @@ export default function ArtistOnboardingPage() {
         facebook: '',
         twitter: '',
     });
+
+    // Auto-save form data to localStorage whenever it changes
+    const saveProgress = () => {
+        if (dataConsent) {
+            localStorage.setItem('artist_onboarding_step', currentStep.toString());
+            localStorage.setItem('artist_onboarding_data', JSON.stringify(formData));
+            localStorage.setItem('artist_onboarding_plan', selectedPlan);
+        }
+    };
 
     const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
@@ -83,14 +94,15 @@ export default function ArtistOnboardingPage() {
     };
 
     const canProgress = () => {
-        // Simple validation - you can expand this
+        // Step 1: Require basic info and data consent
         if (currentStep === 1) {
-            return formData.firstName && formData.lastName && formData.email && formData.city && formData.country;
+            return formData.firstName && formData.lastName && formData.email && formData.phone && formData.city && formData.country && dataConsent;
         }
         return true;
     };
 
     const handleNext = () => {
+        saveProgress();
         if (currentStep < 6) setCurrentStep(currentStep + 1);
     };
 
@@ -268,16 +280,17 @@ export default function ArtistOnboardingPage() {
                                 </div>
                             </div>
 
+                            <div>
+                                <Label htmlFor="displayName">Display Name (Artist Name)</Label>
+                                <Input
+                                    id="displayName"
+                                    placeholder="e.g., M. Rodriguez or leave blank for full name"
+                                    value={formData.displayName}
+                                    onChange={(e) => setFormData({ ...formData, displayName: e.target.value })}
+                                />
+                            </div>
+
                             <div className="grid grid-cols-2 gap-4">
-                                <div>
-                                    <Label htmlFor="displayName">Display Name (Artist Name)</Label>
-                                    <Input
-                                        id="displayName"
-                                        placeholder="e.g., M. Rodriguez or leave blank for full name"
-                                        value={formData.displayName}
-                                        onChange={(e) => setFormData({ ...formData, displayName: e.target.value })}
-                                    />
-                                </div>
                                 <div>
                                     <Label htmlFor="email">Email Address *</Label>
                                     <Input
@@ -286,6 +299,16 @@ export default function ArtistOnboardingPage() {
                                         placeholder="maria@example.com"
                                         value={formData.email}
                                         onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                                    />
+                                </div>
+                                <div>
+                                    <Label htmlFor="phone">Phone Number *</Label>
+                                    <Input
+                                        id="phone"
+                                        type="tel"
+                                        placeholder="(555) 123-4567"
+                                        value={formData.phone}
+                                        onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                                     />
                                 </div>
                             </div>
@@ -365,6 +388,24 @@ export default function ArtistOnboardingPage() {
                                         </button>
                                     ))}
                                 </div>
+                            </div>
+
+                            {/* Data Consent */}
+                            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                                <label className="flex items-start gap-3 cursor-pointer">
+                                    <input
+                                        type="checkbox"
+                                        checked={dataConsent}
+                                        onChange={(e) => setDataConsent(e.target.checked)}
+                                        className="mt-1 h-5 w-5 text-primary rounded cursor-pointer"
+                                    />
+                                    <div className="text-sm">
+                                        <p className="font-semibold text-gray-900 mb-1">Data Saving Consent *</p>
+                                        <p className="text-gray-700">
+                                            I consent to ARTDistrictUSA saving my profile data to complete my onboarding. Your information will be stored securely and used only to create your artist profile. You can delete your data anytime from your account settings.
+                                        </p>
+                                    </div>
+                                </label>
                             </div>
                         </div>
                     )}
