@@ -591,7 +591,7 @@ export default function ArtistOnboardingPage() {
                                     <ul className="space-y-1 text-xs text-gray-600">
                                         <li>✓ <strong>0% Commission</strong></li>
                                         <li>✓ 1000 artworks</li>
-                                        <li>✓ 20 images<span className="text-[10px]">/artwork</span></li>
+                                        <li className="flex items-baseline"><span className="mr-1">✓</span><span>20 <span className="text-[10px]" style={{ whiteSpace: 'nowrap' }}>images/artwork</span></span></li>
                                         <li className="flex items-start"><span className="mr-1">✓</span><span>TopTier template</span></li>
                                         <li>✓ Artist email</li>
                                         <li>✓ 50GB storage</li>
@@ -604,7 +604,7 @@ export default function ArtistOnboardingPage() {
                             </div>
 
                             <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 text-xs text-blue-800">
-                                <strong>All plans include Stripe Direct payments from the customer to Stripe and payout after securityhold of 15-18 days directly to the artist - we take 0% commission from you and don't touch your earnings</strong> • You keep 100% of your sales (but Stripe processing fees may apply: at present ~2.9% + $0.30/transaction)
+                                <strong>All plans include Stripe Direct payments from the customer to Stripe and pay out after security hold of 15-18 days directly to the artist - we take 0% commission from you and don't touch your earnings</strong> • You keep 100% of your sales (but Stripe processing fees may apply: at present ~2.9% + $0.30/transaction)
                             </div>
                         </div>
                     )}
