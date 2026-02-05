@@ -24,15 +24,15 @@ export function Navbar() {
     return (
         <header className="sticky top-0 z-50 w-full border-b bg-white shadow-sm">
             {/* Single Row: Logo, Nav, and Auth - Compact Layout */}
-            <div className="w-full max-w-[1400px] flex h-24 items-center px-4 md:px-8 gap-8">
+            <div className="w-full max-w-[1400px] flex h-24 items-center px-4 md:px-8 gap-10">
                 {/* Logo */}
                 <Link href="/" className="flex items-center flex-shrink-0">
                     <Image
                         src="/logo-new.png"
-                        alt="ARTDistrictUSA - Where Art Meets Your Home"
-                        width={320}
-                        height={80}
-                        className="h-16 w-auto"
+                        alt="ARTDistrictUSA"
+                        width={480}
+                        height={120}
+                        className="h-24 w-auto"
                         priority
                     />
                 </Link>
