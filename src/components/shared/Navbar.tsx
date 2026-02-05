@@ -28,12 +28,11 @@ export function Navbar() {
                 {/* Logo */}
                 <Link href="/" className="flex items-center flex-shrink-0">
                     <Image
-                        src="/logo.png"
+                        src="/logo-new.png"
                         alt="ARTDistrictUSA - Where Art Meets Your Home"
-                        width={400}
-                        height={85}
-                        className="h-20 w-auto brightness-110 contrast-125"
-                        style={{ filter: 'hue-rotate(-5deg) saturate(1.4)' }}
+                        width={320}
+                        height={80}
+                        className="h-16 w-auto"
                         priority
                     />
                 </Link>

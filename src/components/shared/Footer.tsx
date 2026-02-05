@@ -103,11 +103,11 @@ export function Footer() {
                     <div className="space-y-4">
                         <Link href="/" className="inline-block">
                             <Image
-                                src="/logo.png"
+                                src="/logo-new.png"
                                 alt="ARTDistrictUSA"
-                                width={300}
-                                height={64}
-                                className="h-16 w-auto"
+                                width={320}
+                                height={80}
+                                className="h-14 w-auto"
                             />
                         </Link>
                         <p className="text-gray-400 text-sm">
