@@ -148,7 +148,12 @@ export function Footer() {
                                     support@artdistrictusa.com
                                 </a>
                             </li>
-                            <li>📞 24/7 at 888-888-8888</li>
+                            <li className="flex items-center gap-2">
+                                📞
+                                <a href="tel:+18888888888" className="hover:text-primary transition-colors">
+                                    24/7 at 888-888-8888
+                                </a>
+                            </li>
                             <li>📍 Based in USA</li>
                         </ul>
                     </div>

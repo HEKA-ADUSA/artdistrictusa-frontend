@@ -63,12 +63,14 @@ export function Navbar() {
                                     <span className="text-xs">Customer Login</span>
                                 </Button>
                             </Link>
-                            <Button variant="ghost" size="icon" className="relative h-8 w-8">
-                                <ShoppingCart className="h-4 w-4" />
-                                <span className="sr-only">Cart</span>
-                            </Button>
+                            <Link href="/cart">
+                                <Button variant="ghost" size="icon" className="relative h-8 w-8">
+                                    <ShoppingCart className="h-4 w-4" />
+                                    <span className="sr-only">Cart</span>
+                                </Button>
+                            </Link>
                         </div>
-                        <Link href="/login/artist">
+                        <Link href="/sell">
                             <Button size="sm" className="gap-2 bg-primary text-primary-foreground hover:bg-primary/90 h-8 w-full">
                                 <span className="text-xs">Artist/Service Login</span>
                             </Button>
