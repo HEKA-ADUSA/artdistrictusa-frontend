@@ -23,10 +23,10 @@ import aiService from '@/services/ai.service';
 const STEPS = [
     { number: 1, label: 'Personal Info', id: 'personal' },
     { number: 2, label: 'Choose Plan', id: 'plan' },
-    { number: 3, label: 'Your Art', id: 'art' },
-    { number: 4, label: 'Your Story', id: 'story' },
-    { number: 5, label: 'Social', id: 'social' },
-    { number: 6, label: 'Payments', id: 'payments' },
+    { number: 3, label: 'Payment', id: 'payment' },
+    { number: 4, label: 'Your Art', id: 'art' },
+    { number: 5, label: 'Your Story', id: 'story' },
+    { number: 6, label: 'Social', id: 'social' },
 ];
 
 const LANGUAGES = ['English', 'German', 'Spanish', 'French', 'Italian', 'Portuguese', 'Chinese', 'Japanese'];
@@ -611,8 +611,8 @@ export default function ArtistOnboardingPage() {
                         </div>
                     )}
 
-                    {/* Step 3: Your Art */}
-                    {currentStep === 3 && (
+                    {/* Step 4: Your Art */}
+                    {currentStep === 4 && (
                         <div className="space-y-6">
                             <div className="flex items-center gap-3 pb-4 border-b">
                                 <div className="h-12 w-12 rounded-full bg-purple-100 flex items-center justify-center">
@@ -743,8 +743,8 @@ export default function ArtistOnboardingPage() {
                         </div>
                     )}
 
-                    {/* Step 4: Your Story */}
-                    {currentStep === 4 && (
+                    {/* Step 5: Your Story */}
+                    {currentStep === 5 && (
                         <div className="space-y-6">
                             <div className="flex items-center gap-3 pb-4 border-b">
                                 <div className="h-12 w-12 rounded-full bg-green-100 flex items-center justify-center">
@@ -881,8 +881,8 @@ export default function ArtistOnboardingPage() {
                         </div>
                     )}
 
-                    {/* Step 5: Social & Web Presence */}
-                    {currentStep === 5 && (
+                    {/* Step 6: Social & Web Presence */}
+                    {currentStep === 6 && (
                         <div className="space-y-6">
                             <div className="flex items-center gap-3 pb-4 border-b">
                                 <div className="h-12 w-12 rounded-full bg-blue-100 flex items-center justify-center">
@@ -1003,47 +1003,162 @@ export default function ArtistOnboardingPage() {
                         </div>
                     )}
 
-                    {/* Step 6: Payment Setup */}
-                    {currentStep === 6 && (
+                    {/* Step 3: Payment & Payout */}
+                    {currentStep === 3 && (
                         <div className="space-y-6">
                             <div className="flex items-center gap-3 pb-4 border-b">
-                                <div className="h-12 w-12 rounded-full bg-purple-100 flex items-center justify-center">
-                                    <CreditCard className="h-6 w-6 text-purple-600" />
+                                <div className="h-12 w-12 rounded-full bg-green-100 flex items-center justify-center">
+                                    <span className="text-2xl">💳</span>
                                 </div>
                                 <div>
-                                    <h2 className="text-2xl font-bold">Payment Setup</h2>
-                                    <p className="text-gray-600">Connect your Stripe account to receive payments directly from collectors.</p>
+                                    <h2 className="text-2xl font-bold">Payment & Payout</h2>
+                                    <p className="text-gray-600">
+                                        {selectedPlan === 'free'
+                                            ? 'Set up how you\'ll receive payments from art sales'
+                                            : 'Complete your subscription and set up payouts'}
+                                    </p>
                                 </div>
                             </div>
 
-                            {/* Stripe Connect Card */}
-                            <div className="bg-gradient-to-br from-indigo-600 to-purple-700 rounded-xl p-8 text-white">
-                                <div className="flex items-center gap-3 mb-4">
-                                    <span className="text-4xl">💳</span>
-                                    <h3 className="text-2xl font-bold">Stripe Connect</h3>
+                            {/* For PAID plans: Show subscription payment section */}
+                            {selectedPlan !== 'free' && (
+                                <div className="bg-gradient-to-br from-indigo-600 to-purple-700 rounded-xl p-8 text-white">
+                                    <div className="flex items-center gap-3 mb-4">
+                                        <span className="text-4xl">✨</span>
+                                        <div>
+                                            <h3 className="text-2xl font-bold">
+                                                Complete Your {selectedPlan.charAt(0).toUpperCase() + selectedPlan.slice(1)} Subscription
+                                            </h3>
+                                            <p className="text-indigo-100 text-sm">
+                                                {formData.billingPeriod === 'monthly' ? 'Monthly' : 'Yearly'} billing • Cancel anytime
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <div className="mb-6">
+                                        <div className="text-4xl font-bold mb-2">
+                                            ${formData.billingPeriod === 'monthly'
+                                                ? selectedPlan === 'superior' ? '9'
+                                                    : selectedPlan === 'deluxe' ? '19'
+                                                        : selectedPlan === 'professional' ? '29'
+                                                            : '49'
+                                                : selectedPlan === 'superior' ? '90'
+                                                    : selectedPlan === 'deluxe' ? '190'
+                                                        : selectedPlan === 'professional' ? '290'
+                                                            : '490'
+                                            }
+                                            <span className="text-xl font-normal text-indigo-100">
+                                                /{formData.billingPeriod === 'monthly' ? 'month' : 'year'}
+                                            </span>
+                                        </div>
+                                        <p className="text-indigo-100 text-sm">
+                                            🎯 0% commission on all artwork sales • Keep 100% of your earnings
+                                        </p>
+                                    </div>
+
+                                    {/* Placeholder for Stripe Payment Element */}
+                                    <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6 mb-4">
+                                        <p className="text-white text-sm mb-3">💳 Payment Details</p>
+                                        <div className="bg-white rounded p-4 text-gray-700">
+                                            <p className="text-sm italic">Stripe Payment Element will be integrated here</p>
+                                            <p className="text-xs text-gray-500 mt-2">For now, subscription payment collection is a placeholder</p>
+                                        </div>
+                                    </div>
+
+                                    <div className="flex items-center gap-2 text-sm text-indigo-100">
+                                        <span>🔒</span>
+                                        <span>Secured by Stripe • PCI DSS compliant • Bank-level encryption</span>
+                                    </div>
                                 </div>
-                                <p className="mb-6 text-indigo-100">
-                                    We use Stripe Connect so you get paid directly—we never touch your money. After a buyer confirms receipt (7-30 days), funds go straight to your bank account.
+                            )}
+
+                            {/* For FREE plan: Show info message */}
+                            {selectedPlan === 'free' && (
+                                <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
+                                    <div className="flex items-center gap-3 mb-2">
+                                        <span className="text-2xl">🎉</span>
+                                        <h3 className="font-semibold text-blue-900">No Subscription Fee Required</h3>
+                                    </div>
+                                    <p className="text-blue-800 text-sm">
+                                        The Free tier has no monthly cost. Simply set up how you'd like to receive payments when your artwork sells below.
+                                    </p>
+                                </div>
+                            )}
+
+                            {/* Payout Account Setup Section */}
+                            <div className="border-t pt-6">
+                                <h3 className="text-lg font-semibold mb-3">💰 Artwork Sales Payouts</h3>
+                                <p className="text-sm text-gray-600 mb-4">
+                                    Choose how you'll receive payments when collectors purchase your art
                                 </p>
-                                <Button
-                                    variant="secondary"
-                                    size="lg"
-                                    className="bg-white text-indigo-600 hover:bg-gray-100"
-                                    onClick={handleStripeConnect}
-                                    disabled={loading}
-                                >
-                                    {loading ? (
-                                        <>
-                                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                                            Connecting...
-                                        </>
-                                    ) : (
-                                        'Connect with Stripe →'
-                                    )}
-                                </Button>
+
+                                {selectedPlan !== 'free' && (
+                                    <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 mb-4">
+                                        <label className="flex items-start gap-3 cursor-pointer">
+                                            <input
+                                                type="checkbox"
+                                                className="mt-1"
+                                                defaultChecked
+                                            />
+                                            <div>
+                                                <div className="font-medium text-gray-900">Use the same account for artwork payouts</div>
+                                                <div className="text-sm text-gray-600">Your earnings will go to the same payment method used for your subscription</div>
+                                            </div>
+                                        </label>
+                                    </div>
+                                )}
+
+                                {/* Stripe Connect for Payouts */}
+                                <div className="bg-gradient-to-br from-purple-600 to-indigo-700 rounded-xl p-6 text-white">
+                                    <div className="flex items-center gap-3 mb-3">
+                                        <span className="text-3xl">🏦</span>
+                                        <h4 className="text-xl font-bold">Set Up Payout Account</h4>
+                                    </div>
+                                    <p className="mb-4 text-purple-100 text-sm">
+                                        Connect your bank account via Stripe to receive payments directly. We never touch your money—funds go straight to you after buyer confirmation (7-30 days).
+                                    </p>
+
+                                    <div className="flex gap-3">
+                                        <Button
+                                            variant="secondary"
+                                            size="lg"
+                                            className="bg-white text-purple-600 hover:bg-gray-100 flex-1"
+                                            onClick={handleStripeConnect}
+                                            disabled={loading}
+                                        >
+                                            {loading ? (
+                                                <>
+                                                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                                    Connecting...
+                                                </>
+                                            ) : (
+                                                'Set Up Payout Now →'
+                                            )}
+                                        </Button>
+
+                                        <Button
+                                            variant="outline"
+                                            size="lg"
+                                            className="border-white/30 text-white hover:bg-white/10"
+                                        >
+                                            I'll Do This Later
+                                        </Button>
+                                    </div>
+                                </div>
+
+                                {/* Info: Why set up now */}
+                                <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 mt-4">
+                                    <h4 className="font-semibold text-amber-900 text-sm mb-2">⚠️ Important: Payout Required to Receive Earnings</h4>
+                                    <ul className="text-xs text-amber-800 space-y-1">
+                                        <li>• <strong>You must connect a payout account to receive money</strong> when your artwork sells</li>
+                                        <li>• Setting up now means you're ready to get paid immediately</li>
+                                        <li>• Verification can take 1-2 business days</li>
+                                        <li>• You can always update your payout details later in account settings</li>
+                                    </ul>
+                                </div>
                             </div>
 
-                            {/* Additional Payment Info */}
+                            {/* Benefits Grid */}
                             <div className="grid grid-cols-3 gap-4">
                                 <div className="bg-gray-50 p-4 rounded-lg text-center">
                                     <div className="text-3xl mb-2">🔒</div>
