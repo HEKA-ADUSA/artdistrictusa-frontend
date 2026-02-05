@@ -30,9 +30,9 @@ export function Navbar() {
                     <Image
                         src="/logo-new.png"
                         alt="ARTDistrictUSA"
-                        width={480}
-                        height={120}
-                        className="h-24 w-auto"
+                        width={432}
+                        height={140}
+                        className="h-20 w-auto"
                         priority
                     />
                 </Link>

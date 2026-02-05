@@ -105,9 +105,9 @@ export function Footer() {
                             <Image
                                 src="/logo-new.png"
                                 alt="ARTDistrictUSA"
-                                width={320}
-                                height={80}
-                                className="h-14 w-auto"
+                                width={432}
+                                height={140}
+                                className="h-16 w-auto"
                             />
                         </Link>
                         <p className="text-gray-400 text-sm">
