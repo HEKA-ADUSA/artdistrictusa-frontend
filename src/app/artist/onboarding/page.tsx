@@ -52,6 +52,7 @@ export default function ArtistOnboardingPage() {
         zipCode: '',
         country: 'United States',
         languages: ['English'],
+        billingPeriod: 'monthly' as 'monthly' | 'yearly',
         bio: '',
         experience: '',
         widthRange: '',
@@ -415,32 +416,61 @@ export default function ArtistOnboardingPage() {
                         <div className="space-y-6">
                             <div className="text-center pb-4 border-b">
                                 <h2 className="text-2xl font-bold mb-2">Choose Your Membership Plan</h2>
-                                <p className="text-gray-600">Select the plan that fits your creative journey. You can upgrade or downgrade anytime.</p>
+                                <p className="text-gray-600">Select the plan that fits your creative journey. All plans include 0% commission. You can upgrade or downgrade anytime.</p>
                             </div>
 
-                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                            {/* Monthly/Yearly Toggle */}
+                            <div className="flex justify-center">
+                                <div className="inline-flex rounded-lg bg-gray-200 p-1">
+                                    <button
+                                        type="button"
+                                        onClick={() => setFormData({ ...formData, billingPeriod: 'monthly' })}
+                                        className={`px-6 py-2 rounded-md text-sm font-medium transition-colors ${(formData.billingPeriod || 'monthly') === 'monthly'
+                                            ? 'bg-primary text-white shadow-sm'
+                                            : 'text-gray-700 hover:text-gray-900'
+                                            }`}
+                                    >
+                                        Monthly
+                                    </button>
+                                    <button
+                                        type="button"
+                                        onClick={() => setFormData({ ...formData, billingPeriod: 'yearly' })}
+                                        className={`px-6 py-2 rounded-md text-sm font-medium transition-colors ${formData.billingPeriod === 'yearly'
+                                            ? 'bg-primary text-white shadow-sm'
+                                            : 'text-gray-700 hover:text-gray-900'
+                                            }`}
+                                    >
+                                        Yearly <span className="text-xs ml-1">(Save 17%)</span>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
                                 {/* Starter Plan */}
                                 <button
                                     type="button"
                                     onClick={() => setSelectedPlan('starter')}
-                                    className={`text-left p-5 rounded-xl border-2 transition-all ${selectedPlan === 'starter'
+                                    className={`text-left p-4 rounded-xl border-2 transition-all ${selectedPlan === 'starter'
                                         ? 'border-primary bg-primary/5 shadow-lg'
                                         : 'border-gray-200 hover:border-gray-300'
                                         }`}
                                 >
-                                    <div className="flex items-center justify-between mb-3">
-                                        <div className="text-xs font-semibold text-gray-500 uppercase">FREE</div>
-                                        {selectedPlan === 'starter' && <CheckCircle2 className="h-5 w-5 text-primary" />}
+                                    <div className="flex items-center justify-between mb-2">
+                                        <div className="text-xs font-semibold text-gray-500 uppercase">START</div>
+                                        {selectedPlan === 'starter' && <CheckCircle2 className="h-4 w-4 text-primary" />}
                                     </div>
-                                    <div className="text-2xl font-bold mb-1">Starter</div>
+                                    <div className="text-xl font-bold mb-1">Free</div>
                                     <div className="mb-3">
-                                        <span className="text-3xl font-bold">$0</span>
-                                        <span className="text-gray-500">/month</span>
+                                        <span className="text-2xl font-bold">$0</span>
+                                        <span className="text-gray-500 text-sm">/month</span>
                                     </div>
-                                    <ul className="space-y-2 text-sm text-gray-600">
-                                        <li>• 10 artwork listings</li>
-                                        <li>• 3 images per artwork</li>
-                                        <li>• 10% commission</li>
+                                    <ul className="space-y-1 text-xs text-gray-600">
+                                        <li>✓ 10 artworks</li>
+                                        <li>✓ 3 images/artwork</li>
+                                        <li>✓ Standard template</li>
+                                        <li>✓ <strong>0% Commission</strong></li>
+                                        <li>✓ Paid learning tools</li>
+                                        <li>✓ STRIPE DIRECT</li>
                                     </ul>
                                 </button>
 
@@ -448,24 +478,28 @@ export default function ArtistOnboardingPage() {
                                 <button
                                     type="button"
                                     onClick={() => setSelectedPlan('superior')}
-                                    className={`text-left p-5 rounded-xl border-2 transition-all ${selectedPlan === 'superior'
+                                    className={`text-left p-4 rounded-xl border-2 transition-all ${selectedPlan === 'superior'
                                         ? 'border-primary bg-primary/5 shadow-lg'
                                         : 'border-gray-200 hover:border-gray-300'
                                         }`}
                                 >
-                                    <div className="flex items-center justify-between mb-3">
+                                    <div className="flex items-center justify-between mb-2">
                                         <div className="text-xs font-semibold text-gray-500 uppercase">VALUE</div>
-                                        {selectedPlan === 'superior' && <CheckCircle2 className="h-5 w-5 text-primary" />}
+                                        {selectedPlan === 'superior' && <CheckCircle2 className="h-4 w-4 text-primary" />}
                                     </div>
-                                    <div className="text-2xl font-bold mb-1">Superior</div>
+                                    <div className="text-xl font-bold mb-1">Superior</div>
                                     <div className="mb-3">
-                                        <span className="text-3xl font-bold">$9</span>
-                                        <span className="text-gray-500">/month</span>
+                                        <span className="text-2xl font-bold">${(formData.billingPeriod === 'yearly' ? 90 : 9)}</span>
+                                        <span className="text-gray-500 text-sm">/{formData.billingPeriod === 'yearly' ? 'year' : 'month'}</span>
                                     </div>
-                                    <ul className="space-y-2 text-sm text-gray-600">
-                                        <li>• 100 artwork listings</li>
-                                        <li>• 8 images per artwork</li>
-                                        <li>• 0% commission</li>
+                                    <ul className="space-y-1 text-xs text-gray-600">
+                                        <li>✓ 100 artworks</li>
+                                        <li>✓ 8 images/artwork</li>
+                                        <li>✓ Superior template</li>
+                                        <li>✓ Artist email</li>
+                                        <li>✓ 1GB storage</li>
+                                        <li>✓ Social: FB, IG</li>
+                                        <li>✓ <strong>0% Commission</strong></li>
                                     </ul>
                                 </button>
 
@@ -473,28 +507,33 @@ export default function ArtistOnboardingPage() {
                                 <button
                                     type="button"
                                     onClick={() => setSelectedPlan('deluxe')}
-                                    className={`text-left p-5 rounded-xl border-2 relative transition-all ${selectedPlan === 'deluxe'
-                                        ? 'border-primary bg-primary shadow-lg text-white scale-105'
+                                    className={`text-left p-4 rounded-xl border-2 relative transition-all ${selectedPlan === 'deluxe'
+                                        ? 'border-primary bg-primary shadow-lg text-white'
                                         : 'border-primary/50 hover:border-primary'
                                         }`}
                                 >
-                                    <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-yellow-400 text-gray-900 px-3 py-1 rounded-full text-xs font-bold">
-                                        RECOMMENDED
+                                    <div className="absolute -top-2 left-1/2 -translate-x-1/2 bg-yellow-400 text-gray-900 px-2 py-0.5 rounded-full text-xs font-bold">
+                                        POPULAR
                                     </div>
-                                    <div className="flex items-center justify-between mb-3">
+                                    <div className="flex items-center justify-between mb-2">
                                         <div className={`text-xs font-semibold uppercase ${selectedPlan === 'deluxe' ? 'text-white/80' : 'text-gray-500'}`}>DELUXE</div>
-                                        {selectedPlan === 'deluxe' && <CheckCircle2 className="h-5 w-5" />}
+                                        {selectedPlan === 'deluxe' && <CheckCircle2 className="h-4 w-4" />}
                                     </div>
-                                    <div className="text-2xl font-bold mb-1">DeLuxe</div>
+                                    <div className="text-xl font-bold mb-1">DeLuxe</div>
                                     <div className="mb-3">
-                                        <span className="text-3xl font-bold">$19</span>
-                                        <span className={selectedPlan === 'deluxe' ? 'text-white/80' : 'text-gray-500'}>/month</span>
+                                        <span className="text-2xl font-bold">${(formData.billingPeriod === 'yearly' ? 190 : 19)}</span>
+                                        <span className={`text-sm ${selectedPlan === 'deluxe' ? 'text-white/80' : 'text-gray-500'}`}>/{formData.billingPeriod === 'yearly' ? 'year' : 'month'}</span>
                                     </div>
-                                    <ul className={`space-y-2 text-sm ${selectedPlan === 'deluxe' ? 'text-white/90' : 'text-gray-600'}`}>
-                                        <li>• 200 artwork listings</li>
-                                        <li>• 12 images per artwork</li>
-                                        <li>• 0% commission</li>
-                                        <li>• Artist Blog included</li>
+                                    <ul className={`space-y-1 text-xs ${selectedPlan === 'deluxe' ? 'text-white/90' : 'text-gray-600'}`}>
+                                        <li>✓ 200 artworks</li>
+                                        <li>✓ 12 images/artwork</li>
+                                        <li>✓ DeLuxe template</li>
+                                        <li>✓ Artist email</li>
+                                        <li>✓ 5GB storage</li>
+                                        <li>✓ Artist blog</li>
+                                        <li>✓ Social: ALL</li>
+                                        <li>✓ Free learning tools</li>
+                                        <li>✓ <strong>0% Commission</strong></li>
                                     </ul>
                                 </button>
 
@@ -502,25 +541,30 @@ export default function ArtistOnboardingPage() {
                                 <button
                                     type="button"
                                     onClick={() => setSelectedPlan('professional')}
-                                    className={`text-left p-5 rounded-xl border-2 transition-all ${selectedPlan === 'professional'
+                                    className={`text-left p-4 rounded-xl border-2 transition-all ${selectedPlan === 'professional'
                                         ? 'border-primary bg-primary/5 shadow-lg'
                                         : 'border-gray-200 hover:border-gray-300'
                                         }`}
                                 >
-                                    <div className="flex items-center justify-between mb-3">
+                                    <div className="flex items-center justify-between mb-2">
                                         <div className="text-xs font-semibold text-gray-500 uppercase">PRO</div>
-                                        {selectedPlan === 'professional' && <CheckCircle2 className="h-5 w-5 text-primary" />}
+                                        {selectedPlan === 'professional' && <CheckCircle2 className="h-4 w-4 text-primary" />}
                                     </div>
-                                    <div className="text-2xl font-bold mb-1">Professional</div>
+                                    <div className="text-xl font-bold mb-1">Professional</div>
                                     <div className="mb-3">
-                                        <span className="text-3xl font-bold">$29</span>
-                                        <span className="text-gray-500">/month</span>
+                                        <span className="text-2xl font-bold">${(formData.billingPeriod === 'yearly' ? 290 : 29)}</span>
+                                        <span className="text-gray-500 text-sm">/{formData.billingPeriod === 'yearly' ? 'year' : 'month'}</span>
                                     </div>
-                                    <ul className="space-y-2 text-sm text-gray-600">
-                                        <li>• 500 artwork listings</li>
-                                        <li>• 15 images per artwork</li>
-                                        <li>• 0% commission</li>
-                                        <li>• Priority support</li>
+                                    <ul className="space-y-1 text-xs text-gray-600">
+                                        <li>✓ 500 artworks</li>
+                                        <li>✓ 15 images/artwork</li>
+                                        <li>✓ Professional template</li>
+                                        <li>✓ Artist email</li>
+                                        <li>✓ 10GB storage</li>
+                                        <li>✓ Artist blog</li>
+                                        <li>✓ Social: ALL</li>
+                                        <li>✓ Event invitations</li>
+                                        <li>✓ <strong>0% Commission</strong></li>
                                     </ul>
                                 </button>
 
@@ -528,31 +572,37 @@ export default function ArtistOnboardingPage() {
                                 <button
                                     type="button"
                                     onClick={() => setSelectedPlan('toptier')}
-                                    className={`text-left p-5 rounded-xl border-2 transition-all ${selectedPlan === 'toptier'
+                                    className={`text-left p-4 rounded-xl border-2 transition-all ${selectedPlan === 'toptier'
                                         ? 'border-primary bg-primary/5 shadow-lg'
                                         : 'border-gray-200 hover:border-gray-300'
                                         }`}
                                 >
-                                    <div className="flex items-center justify-between mb-3">
+                                    <div className="flex items-center justify-between mb-2">
                                         <div className="text-xs font-semibold text-primary uppercase">ELITE</div>
-                                        {selectedPlan === 'toptier' && <CheckCircle2 className="h-5 w-5 text-primary" />}
+                                        {selectedPlan === 'toptier' && <CheckCircle2 className="h-4 w-4 text-primary" />}
                                     </div>
-                                    <div className="text-2xl font-bold mb-1">TopTier</div>
+                                    <div className="text-xl font-bold mb-1">TopTier</div>
                                     <div className="mb-3">
-                                        <span className="text-3xl font-bold">$49</span>
-                                        <span className="text-gray-500">/month</span>
+                                        <span className="text-2xl font-bold">${(formData.billingPeriod === 'yearly' ? 490 : 49)}</span>
+                                        <span className="text-gray-500 text-sm">/{formData.billingPeriod === 'yearly' ? 'year' : 'month'}</span>
                                     </div>
-                                    <ul className="space-y-2 text-sm text-gray-600">
-                                        <li>• 1000 artwork listings</li>
-                                        <li>• 20 images per artwork</li>
-                                        <li>• 0% commission</li>
-                                        <li>• Homepage featured</li>
+                                    <ul className="space-y-1 text-xs text-gray-600">
+                                        <li>✓ 1000 artworks</li>
+                                        <li>✓ 20 images/artwork</li>
+                                        <li>✓ TopTier template</li>
+                                        <li>✓ Artist email</li>
+                                        <li>✓ 50GB storage</li>
+                                        <li>✓ Artist blog</li>
+                                        <li>✓ Social: ALL</li>
+                                        <li>✓ Event invitations</li>
+                                        <li>✓ Homepage featured</li>
+                                        <li>✓ <strong>0% Commission</strong></li>
                                     </ul>
                                 </button>
                             </div>
 
                             <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 text-sm text-blue-800">
-                                <strong>Free 14-day trial on all paid plans!</strong> You can change or cancel your plan anytime.
+                                <strong>All plans include Stripe Direct payments + 0% commission</strong> • You keep 100% of your sales (Stripe processing fees apply: ~2.9% + $0.30)
                             </div>
                         </div>
                     )}
