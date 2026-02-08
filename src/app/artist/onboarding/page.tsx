@@ -974,7 +974,7 @@ export default function ArtistOnboardingPage() {
                                                     <SelectValue placeholder="Select secondary style..." />
                                                 </SelectTrigger>
                                                 <SelectContent>
-                                                    <SelectItem value="">None</SelectItem>
+                                                    <SelectItem value="none">None</SelectItem>
                                                     <SelectItem value="abstract">Abstract</SelectItem>
                                                     <SelectItem value="realism">Realism</SelectItem>
                                                     <SelectItem value="impressionism">Impressionism</SelectItem>
@@ -1003,7 +1003,7 @@ export default function ArtistOnboardingPage() {
                                                     <SelectValue placeholder="Select secondary medium..." />
                                                 </SelectTrigger>
                                                 <SelectContent>
-                                                    <SelectItem value="">None</SelectItem>
+                                                    <SelectItem value="none">None</SelectItem>
                                                     <SelectItem value="oil">Oil Painting</SelectItem>
                                                     <SelectItem value="acrylic">Acrylic Painting</SelectItem>
                                                     <SelectItem value="watercolor">Watercolor</SelectItem>
@@ -1477,9 +1477,11 @@ export default function ArtistOnboardingPage() {
                                         </Button>
 
                                         <Button
+                                            type="button"
                                             variant="outline"
                                             size="lg"
-                                            className="border-white/30 text-white hover:bg-white/10"
+                                            onClick={() => saveProgress()}
+                                            className="border-2 border-primary text-primary hover:bg-primary/10 font-semibold"
                                         >
                                             I'll Do This Later
                                         </Button>
