@@ -568,8 +568,10 @@ function MembershipPlansSection() {
 
                                 <Link href="/artist/onboarding">
                                     <Button
-                                        className="w-full border-primary text-primary hover:bg-primary/10"
-                                        variant="outline"
+                                        className={`w-full ${tier.highlighted
+                                            ? 'bg-primary hover:bg-primary/90 text-white'
+                                            : 'border-primary text-primary hover:bg-primary/10'}`}
+                                        variant={tier.highlighted ? 'default' : 'outline'}
                                     >
                                         {tier.priceMonthly === 0 ? 'Get Started' : 'Start Free Trial'}
                                     </Button>
