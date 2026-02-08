@@ -903,60 +903,63 @@ export default function ArtistOnboardingPage() {
 
                                 {/* Art Style */}
                                 <div className="space-y-4">
-                                    <div>
-                                        <Label htmlFor="artStyle">Primary Art Style *</Label>
-                                        <Select
-                                            value={formData.artStyle || ''}
-                                            onValueChange={(value) => setFormData({ ...formData, artStyle: value })}
-                                        >
-                                            <SelectTrigger>
-                                                <SelectValue placeholder="Select your primary style..." />
-                                            </SelectTrigger>
-                                            <SelectContent>
-                                                <SelectItem value="abstract">Abstract</SelectItem>
-                                                <SelectItem value="realism">Realism</SelectItem>
-                                                <SelectItem value="impressionism">Impressionism</SelectItem>
-                                                <SelectItem value="expressionism">Expressionism</SelectItem>
-                                                <SelectItem value="surrealism">Surrealism</SelectItem>
-                                                <SelectItem value="contemporary">Contemporary</SelectItem>
-                                                <SelectItem value="modern">Modern</SelectItem>
-                                                <SelectItem value="minimalism">Minimalism</SelectItem>
-                                                <SelectItem value="pop-art">Pop Art</SelectItem>
-                                                <SelectItem value="street-art">Street Art</SelectItem>
-                                                <SelectItem value="figurative">Figurative</SelectItem>
-                                                <SelectItem value="landscape">Landscape</SelectItem>
-                                                <SelectItem value="other">Other</SelectItem>
-                                            </SelectContent>
-                                        </Select>
-                                    </div>
+                                    {/* Art Style + Medium - Side by Side */}
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <div>
+                                            <Label htmlFor="artStyle">Primary Art Style *</Label>
+                                            <Select
+                                                value={formData.artStyle || ''}
+                                                onValueChange={(value) => setFormData({ ...formData, artStyle: value })}
+                                            >
+                                                <SelectTrigger>
+                                                    <SelectValue placeholder="Select your primary style..." />
+                                                </SelectTrigger>
+                                                <SelectContent>
+                                                    <SelectItem value="abstract">Abstract</SelectItem>
+                                                    <SelectItem value="realism">Realism</SelectItem>
+                                                    <SelectItem value="impressionism">Impressionism</SelectItem>
+                                                    <SelectItem value="expressionism">Expressionism</SelectItem>
+                                                    <SelectItem value="surrealism">Surrealism</SelectItem>
+                                                    <SelectItem value="contemporary">Contemporary</SelectItem>
+                                                    <SelectItem value="modern">Modern</SelectItem>
+                                                    <SelectItem value="minimalism">Minimalism</SelectItem>
+                                                    <SelectItem value="pop-art">Pop Art</SelectItem>
+                                                    <SelectItem value="street-art">Street Art</SelectItem>
+                                                    <SelectItem value="figurative">Figurative</SelectItem>
+                                                    <SelectItem value="landscape">Landscape</SelectItem>
+                                                    <SelectItem value="other">Other</SelectItem>
+                                                </SelectContent>
+                                            </Select>
+                                        </div>
 
-                                    {/* Medium */}
-                                    <div>
-                                        <Label htmlFor="medium">Primary Medium *</Label>
-                                        <Select
-                                            value={formData.medium || ''}
-                                            onValueChange={(value) => setFormData({ ...formData, medium: value })}
-                                        >
-                                            <SelectTrigger>
-                                                <SelectValue placeholder="Select your primary medium..." />
-                                            </SelectTrigger>
-                                            <SelectContent>
-                                                <SelectItem value="oil">Oil Painting</SelectItem>
-                                                <SelectItem value="acrylic">Acrylic Painting</SelectItem>
-                                                <SelectItem value="watercolor">Watercolor</SelectItem>
-                                                <SelectItem value="mixed-media">Mixed Media</SelectItem>
-                                                <SelectItem value="digital">Digital Art</SelectItem>
-                                                <SelectItem value="photography">Photography</SelectItem>
-                                                <SelectItem value="sculpture">Sculpture</SelectItem>
-                                                <SelectItem value="ceramics">Ceramics</SelectItem>
-                                                <SelectItem value="printmaking">Printmaking</SelectItem>
-                                                <SelectItem value="drawing">Drawing</SelectItem>
-                                                <SelectItem value="collage">Collage</SelectItem>
-                                                <SelectItem value="textile">Textile Art</SelectItem>
-                                                <SelectItem value="installation">Installation</SelectItem>
-                                                <SelectItem value="other">Other</SelectItem>
-                                            </SelectContent>
-                                        </Select>
+                                        {/* Medium */}
+                                        <div>
+                                            <Label htmlFor="medium">Primary Medium *</Label>
+                                            <Select
+                                                value={formData.medium || ''}
+                                                onValueChange={(value) => setFormData({ ...formData, medium: value })}
+                                            >
+                                                <SelectTrigger>
+                                                    <SelectValue placeholder="Select your primary medium..." />
+                                                </SelectTrigger>
+                                                <SelectContent>
+                                                    <SelectItem value="oil">Oil Painting</SelectItem>
+                                                    <SelectItem value="acrylic">Acrylic Painting</SelectItem>
+                                                    <SelectItem value="watercolor">Watercolor</SelectItem>
+                                                    <SelectItem value="mixed-media">Mixed Media</SelectItem>
+                                                    <SelectItem value="digital">Digital Art</SelectItem>
+                                                    <SelectItem value="photography">Photography</SelectItem>
+                                                    <SelectItem value="sculpture">Sculpture</SelectItem>
+                                                    <SelectItem value="ceramics">Ceramics</SelectItem>
+                                                    <SelectItem value="printmaking">Printmaking</SelectItem>
+                                                    <SelectItem value="drawing">Drawing</SelectItem>
+                                                    <SelectItem value="collage">Collage</SelectItem>
+                                                    <SelectItem value="textile">Textile Art</SelectItem>
+                                                    <SelectItem value="installation">Installation</SelectItem>
+                                                    <SelectItem value="other">Other</SelectItem>
+                                                </SelectContent>
+                                            </Select>
+                                        </div>
                                     </div>
 
                                     {/* Typical Dimensions */}
@@ -987,36 +990,39 @@ export default function ArtistOnboardingPage() {
                                         </p>
                                     </div>
 
-                                    {/* Price Range */}
-                                    <div>
-                                        <Label htmlFor="priceRange">Typical Price Range</Label>
-                                        <Input
-                                            id="priceRange"
-                                            placeholder="e.g., $500-$5,000"
-                                            value={formData.priceRange}
-                                            onChange={(e) => setFormData({ ...formData, priceRange: e.target.value })}
-                                        />
-                                        <p className="text-xs text-gray-500 mt-1">
-                                            Give collectors an idea of your pricing
-                                        </p>
-                                    </div>
+                                    {/* Accept Commissions + Price Range - Side by Side */}
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        {/* Accept Commissions */}
+                                        <div>
+                                            <Label htmlFor="acceptsCommissions">Do you accept commissions?</Label>
+                                            <Select
+                                                value={formData.acceptsCommissions}
+                                                onValueChange={(value) => setFormData({ ...formData, acceptsCommissions: value })}
+                                            >
+                                                <SelectTrigger>
+                                                    <SelectValue placeholder="Select..." />
+                                                </SelectTrigger>
+                                                <SelectContent>
+                                                    <SelectItem value="yes">Yes - Open to commissions</SelectItem>
+                                                    <SelectItem value="maybe">Maybe - Case by case</SelectItem>
+                                                    <SelectItem value="no">No - Original work only</SelectItem>
+                                                </SelectContent>
+                                            </Select>
+                                        </div>
 
-                                    {/* Accept Commissions */}
-                                    <div>
-                                        <Label htmlFor="acceptsCommissions">Do you accept commissions?</Label>
-                                        <Select
-                                            value={formData.acceptsCommissions}
-                                            onValueChange={(value) => setFormData({ ...formData, acceptsCommissions: value })}
-                                        >
-                                            <SelectTrigger>
-                                                <SelectValue placeholder="Select..." />
-                                            </SelectTrigger>
-                                            <SelectContent>
-                                                <SelectItem value="yes">Yes - Open to commissions</SelectItem>
-                                                <SelectItem value="maybe">Maybe - Case by case</SelectItem>
-                                                <SelectItem value="no">No - Original work only</SelectItem>
-                                            </SelectContent>
-                                        </Select>
+                                        {/* Price Range */}
+                                        <div>
+                                            <Label htmlFor="priceRange">Typical Price Range</Label>
+                                            <Input
+                                                id="priceRange"
+                                                placeholder="e.g., $500-$5,000"
+                                                value={formData.priceRange}
+                                                onChange={(e) => setFormData({ ...formData, priceRange: e.target.value })}
+                                            />
+                                            <p className="text-xs text-gray-500 mt-1">
+                                                Give collectors an idea of your pricing
+                                            </p>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
