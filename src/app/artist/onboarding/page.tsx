@@ -40,6 +40,8 @@ export default function ArtistOnboardingPage() {
     const [error, setError] = useState<string | null>(null);
     const [generatingBio, setGeneratingBio] = useState(false);
     const [dataConsent, setDataConsent] = useState(false);
+    const [consentError, setConsentError] = useState(false);
+    const [otherLanguages, setOtherLanguages] = useState('');
     const [formData, setFormData] = useState({
         firstName: '',
         lastName: '',
@@ -133,6 +135,16 @@ export default function ArtistOnboardingPage() {
     const handleNext = () => {
         // Clear any previous errors
         setError(null);
+        setConsentError(false);
+
+        // Step 1: Validate consent checkbox
+        if (currentStep === 1 && !dataConsent) {
+            setConsentError(true);
+            setError('You must agree to data saving consent to continue');
+            // Auto-clear error after animation
+            setTimeout(() => setConsentError(false), 2000);
+            return;
+        }
 
         // Validate Step 4 and show specific error messages
         if (currentStep === 4) {
@@ -473,10 +485,22 @@ export default function ArtistOnboardingPage() {
                                         </button>
                                     ))}
                                 </div>
+                                {/* Other Languages Input */}
+                                <div className="mt-3">
+                                    <Label htmlFor="otherLanguages" className="text-sm">Other Languages (optional)</Label>
+                                    <Input
+                                        id="otherLanguages"
+                                        placeholder="e.g., Portuguese, Arabic, Hindi"
+                                        value={otherLanguages}
+                                        onChange={(e) => setOtherLanguages(e.target.value)}
+                                        className="mt-1"
+                                    />
+                                    <p className="text-xs text-gray-500 mt-1">Separate multiple languages with commas</p>
+                                </div>
                             </div>
 
                             {/* Data Consent */}
-                            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                            <div className={`border rounded-lg p-4 transition-all ${consentError ? 'bg-red-50 border-red-300 animate-shake' : 'bg-blue-50 border-blue-200'}`}>
                                 <label className="flex items-start gap-3 cursor-pointer">
                                     <input
                                         type="checkbox"
@@ -485,7 +509,7 @@ export default function ArtistOnboardingPage() {
                                         className="mt-1 h-5 w-5 text-primary rounded cursor-pointer"
                                     />
                                     <div className="text-sm">
-                                        <p className="font-semibold text-gray-900 mb-1">Data Saving Consent *</p>
+                                        <p className={`font-semibold mb-1 ${consentError ? 'text-red-700' : 'text-gray-900'}`}>Data Saving Consent *</p>
                                         <p className="text-gray-700">
                                             I consent to ARTDistrictUSA saving my profile data to complete my onboarding. Your information will be stored securely and used only to create your artist profile. You can delete your data anytime from your account settings.
                                         </p>
