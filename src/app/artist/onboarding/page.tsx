@@ -886,12 +886,12 @@ export default function ArtistOnboardingPage() {
                     {currentStep === 5 && (
                         <div className="space-y-6">
                             <div className="flex items-center gap-3 pb-4 border-b">
-                                <div className="h-12 w-12 rounded-full bg-blue-100 flex items-center justify-center">
-                                    <span className="text-2xl">🌐</span>
+                                <div className="h-12 w-12 rounded-full bg-purple-100 flex items-center justify-center">
+                                    <span className="text-2xl">🎨</span>
                                 </div>
                                 <div>
-                                    <h2 className="text-2xl font-bold">Social & Web Presence</h2>
-                                    <p className="text-gray-600">Connect your online presence to build credibility</p>
+                                    <h2 className="text-2xl font-bold">Your Profile</h2>
+                                    <p className="text-gray-600">Tell us about your art and your story</p>
                                 </div>
                             </div>
 
@@ -903,7 +903,7 @@ export default function ArtistOnboardingPage() {
 
                                 {/* Art Style */}
                                 <div className="space-y-4">
-                                    {/* Art Style + Medium - Side by Side */}
+                                    {/* Primary Art Style + Medium - Side by Side */}
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                         <div>
                                             <Label htmlFor="artStyle">Primary Art Style *</Label>
@@ -932,7 +932,7 @@ export default function ArtistOnboardingPage() {
                                             </Select>
                                         </div>
 
-                                        {/* Medium */}
+                                        {/* Primary Medium */}
                                         <div>
                                             <Label htmlFor="medium">Primary Medium *</Label>
                                             <Select
@@ -943,6 +943,67 @@ export default function ArtistOnboardingPage() {
                                                     <SelectValue placeholder="Select your primary medium..." />
                                                 </SelectTrigger>
                                                 <SelectContent>
+                                                    <SelectItem value="oil">Oil Painting</SelectItem>
+                                                    <SelectItem value="acrylic">Acrylic Painting</SelectItem>
+                                                    <SelectItem value="watercolor">Watercolor</SelectItem>
+                                                    <SelectItem value="mixed-media">Mixed Media</SelectItem>
+                                                    <SelectItem value="digital">Digital Art</SelectItem>
+                                                    <SelectItem value="photography">Photography</SelectItem>
+                                                    <SelectItem value="sculpture">Sculpture</SelectItem>
+                                                    <SelectItem value="ceramics">Ceramics</SelectItem>
+                                                    <SelectItem value="printmaking">Printmaking</SelectItem>
+                                                    <SelectItem value="drawing">Drawing</SelectItem>
+                                                    <SelectItem value="collage">Collage</SelectItem>
+                                                    <SelectItem value="textile">Textile Art</SelectItem>
+                                                    <SelectItem value="installation">Installation</SelectItem>
+                                                    <SelectItem value="other">Other</SelectItem>
+                                                </SelectContent>
+                                            </Select>
+                                        </div>
+                                    </div>
+
+                                    {/* Secondary Art Style + Medium - Side by Side (Optional) */}
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <div>
+                                            <Label htmlFor="secondaryArtStyle">Secondary Art Style (Optional)</Label>
+                                            <Select
+                                                value={formData.secondaryArtStyle || ''}
+                                                onValueChange={(value) => setFormData({ ...formData, secondaryArtStyle: value })}
+                                            >
+                                                <SelectTrigger>
+                                                    <SelectValue placeholder="Select secondary style..." />
+                                                </SelectTrigger>
+                                                <SelectContent>
+                                                    <SelectItem value="">None</SelectItem>
+                                                    <SelectItem value="abstract">Abstract</SelectItem>
+                                                    <SelectItem value="realism">Realism</SelectItem>
+                                                    <SelectItem value="impressionism">Impressionism</SelectItem>
+                                                    <SelectItem value="expressionism">Expressionism</SelectItem>
+                                                    <SelectItem value="surrealism">Surrealism</SelectItem>
+                                                    <SelectItem value="contemporary">Contemporary</SelectItem>
+                                                    <SelectItem value="modern">Modern</SelectItem>
+                                                    <SelectItem value="minimalism">Minimalism</SelectItem>
+                                                    <SelectItem value="pop-art">Pop Art</SelectItem>
+                                                    <SelectItem value="street-art">Street Art</SelectItem>
+                                                    <SelectItem value="figurative">Figurative</SelectItem>
+                                                    <SelectItem value="landscape">Landscape</SelectItem>
+                                                    <SelectItem value="other">Other</SelectItem>
+                                                </SelectContent>
+                                            </Select>
+                                        </div>
+
+                                        {/* Secondary Medium */}
+                                        <div>
+                                            <Label htmlFor="secondaryMedium">Secondary Medium (Optional)</Label>
+                                            <Select
+                                                value={formData.secondaryMedium || ''}
+                                                onValueChange={(value) => setFormData({ ...formData, secondaryMedium: value })}
+                                            >
+                                                <SelectTrigger>
+                                                    <SelectValue placeholder="Select secondary medium..." />
+                                                </SelectTrigger>
+                                                <SelectContent>
+                                                    <SelectItem value="">None</SelectItem>
                                                     <SelectItem value="oil">Oil Painting</SelectItem>
                                                     <SelectItem value="acrylic">Acrylic Painting</SelectItem>
                                                     <SelectItem value="watercolor">Watercolor</SelectItem>
@@ -1164,12 +1225,12 @@ export default function ArtistOnboardingPage() {
                     {currentStep === 6 && (
                         <div className="space-y-6">
                             <div className="flex items-center gap-3 pb-4 border-b">
-                                <div className="h-12 w-12 rounded-full bg-purple-100 flex items-center justify-center">
-                                    <span className="text-2xl">🎨</span>
+                                <div className="h-12 w-12 rounded-full bg-blue-100 flex items-center justify-center">
+                                    <span className="text-2xl">🌐</span>
                                 </div>
                                 <div>
-                                    <h2 className="text-2xl font-bold">Your Profile</h2>
-                                    <p className="text-gray-600">Tell us about your art and your story</p>
+                                    <h2 className="text-2xl font-bold">Social & Web Presence</h2>
+                                    <p className="text-gray-600">Connect your online presence to build credibility</p>
                                 </div>
                             </div>
 
