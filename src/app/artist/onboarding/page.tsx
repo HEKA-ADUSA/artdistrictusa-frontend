@@ -1292,7 +1292,7 @@ export default function ArtistOnboardingPage() {
                                 <div>
                                     <h2 className="text-2xl font-bold">Payment & Payout</h2>
                                     <p className="text-gray-600">
-                                        {selectedPlan === 'free'
+                                        {selectedPlan === 'starter'
                                             ? 'Set up how you\'ll receive payments from art sales'
                                             : 'Complete your subscription and set up payouts'}
                                     </p>
@@ -1300,7 +1300,7 @@ export default function ArtistOnboardingPage() {
                             </div>
 
                             {/* For PAID plans: Show subscription payment section */}
-                            {selectedPlan !== 'free' && (
+                            {selectedPlan !== 'starter' && (
                                 <div className="bg-gradient-to-br from-indigo-600 to-purple-700 rounded-xl p-8 text-white">
                                     <div className="flex items-center gap-3 mb-4">
                                         <span className="text-4xl">✨</span>
@@ -1352,7 +1352,7 @@ export default function ArtistOnboardingPage() {
                             )}
 
                             {/* For FREE plan: Show info message */}
-                            {selectedPlan === 'free' && (
+                            {selectedPlan === 'starter' && (
                                 <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
                                     <div className="flex items-center gap-3 mb-2">
                                         <span className="text-2xl">🎉</span>
@@ -1371,7 +1371,7 @@ export default function ArtistOnboardingPage() {
                                     Choose how you'll receive payments when collectors purchase your art
                                 </p>
 
-                                {selectedPlan !== 'free' && (
+                                {selectedPlan !== 'starter' && (
                                     <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 mb-4">
                                         <label className="flex items-start gap-3 cursor-pointer">
                                             <input
