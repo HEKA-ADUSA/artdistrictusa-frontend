@@ -220,23 +220,27 @@ export default function ArtistOnboardingPage() {
         setError(null);
 
         try {
-            // Submit all artist data to backend
-            await authService.becomeArtist({
-                artistName: formData.displayName || `${formData.firstName} ${formData.lastName}`,
-                bio: formData.bio,
-                website: formData.website,
-                instagram: formData.instagram,
-                facebook: formData.facebook,
-                twitter: formData.twitter,
-                city: formData.city,
-                state: formData.state,
-                country: formData.country,
-                languages: formData.languages,
-                subscriptionTier: selectedPlan,
+            // Submit all artist data to our API endpoint
+            const response = await fetch('/api/onboarding/submit', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    ...formData,
+                    selectedPlan,
+                    billingPeriod,
+                }),
             });
 
-            // Redirect to upload page
-            router.push('/artist/upload');
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.message || 'Failed to submit onboarding');
+            }
+
+            // Redirect to success page with artist name
+            router.push(`/artist/onboarding/success?name=${encodeURIComponent(data.artistName)}`);
         } catch (err: any) {
             setError(err.response?.data?.message || 'Failed to complete onboarding. Please try again.');
         } finally {
@@ -883,7 +887,7 @@ export default function ArtistOnboardingPage() {
 
                     {/* Step 5: Your Story */}
                     {/* Step 5: Your Profile (Combined Art + Story) */}
-                    {currentStep === 5 && (
+                    {currentStep === 6 && (
                         <div className="space-y-6">
                             <div className="flex items-center gap-3 pb-4 border-b">
                                 <div className="h-12 w-12 rounded-full bg-purple-100 flex items-center justify-center">
@@ -1222,7 +1226,7 @@ export default function ArtistOnboardingPage() {
                     )}
 
                     {/* Step 6: Social & Web Presence */}
-                    {currentStep === 6 && (
+                    {currentStep === 5 && (
                         <div className="space-y-6">
                             <div className="flex items-center gap-3 pb-4 border-b">
                                 <div className="h-12 w-12 rounded-full bg-blue-100 flex items-center justify-center">
