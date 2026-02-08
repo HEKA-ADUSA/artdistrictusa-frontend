@@ -54,7 +54,7 @@ export default function SellArtPage() {
                                     </Button>
                                 </Link>
                                 <Link href="/artworks">
-                                    <Button size="lg" variant="outline" className="h-14 px-10 text-lg font-semibold border-white/20 hover:bg-white/10 text-white">
+                                    <Button size="lg" variant="outline" className="h-14 px-10 text-lg font-semibold border-primary text-primary hover:bg-primary/10 bg-white">
                                         Browse Artwork
                                     </Button>
                                 </Link>
