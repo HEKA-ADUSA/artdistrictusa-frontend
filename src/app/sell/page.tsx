@@ -566,17 +566,19 @@ function MembershipPlansSection() {
                                     )}
                                 </ul>
 
-                                <Button
-                                    className={`w-full ${tier.highlighted
-                                        ? 'bg-primary hover:bg-primary/90'
-                                        : tier.name === 'TopTier'
-                                            ? 'border-primary text-primary hover:bg-primary/10'
-                                            : 'border-gray-600 hover:bg-gray-700'
-                                        }`}
-                                    variant={tier.highlighted ? 'default' : 'outline'}
-                                >
-                                    {tier.priceMonthly === 0 ? 'Get Started' : 'Start Free Trial'}
-                                </Button>
+                                <Link href="/artist/onboarding">
+                                    <Button
+                                        className={`w-full ${tier.highlighted
+                                            ? 'bg-primary hover:bg-primary/90'
+                                            : tier.name === 'TopTier'
+                                                ? 'border-primary text-primary hover:bg-primary/10'
+                                                : 'border-gray-600 hover:bg-gray-700'
+                                            }`}
+                                        variant={tier.highlighted ? 'default' : 'outline'}
+                                    >
+                                        {tier.priceMonthly === 0 ? 'Get Started' : 'Start Free Trial'}
+                                    </Button>
+                                </Link>
                             </div>
                         );
                     })}

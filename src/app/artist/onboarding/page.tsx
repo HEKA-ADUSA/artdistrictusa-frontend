@@ -441,7 +441,7 @@ export default function ArtistOnboardingPage() {
                                     </div>
                                 </div>
                                 <div>
-                                    <Label htmlFor="streetAddress">Street Address</Label>
+                                    <Label htmlFor="streetAddress">Street Address *</Label>
                                     <Input
                                         id="streetAddress"
                                         placeholder="123 Main St, Apt 4B"
