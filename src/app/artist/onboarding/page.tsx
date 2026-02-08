@@ -229,7 +229,7 @@ export default function ArtistOnboardingPage() {
                 body: JSON.stringify({
                     ...formData,
                     selectedPlan,
-                    billingPeriod,
+                    billingPeriod: formData.billingPeriod,
                 }),
             });
 
