@@ -24,9 +24,9 @@ const STEPS = [
     { number: 1, label: 'Personal Info', id: 'personal' },
     { number: 2, label: 'Choose Plan', id: 'plan' },
     { number: 3, label: 'Payment', id: 'payment' },
-    { number: 4, label: 'Your Art', id: 'art' },
-    { number: 5, label: 'Your Story', id: 'story' },
-    { number: 6, label: 'Social', id: 'social' },
+    { number: 4, label: 'Verification', id: 'verification' },
+    { number: 5, label: 'Social & Web', id: 'social' },
+    { number: 6, label: 'Your Profile', id: 'profile' },
 ];
 
 const LANGUAGES = ['English', 'German', 'Spanish', 'French', 'Italian', 'Portuguese', 'Chinese', 'Japanese'];
@@ -53,6 +53,10 @@ export default function ArtistOnboardingPage() {
         country: 'United States',
         languages: ['English'],
         billingPeriod: 'monthly' as 'monthly' | 'yearly',
+        taxIdType: 'ssn' as 'ssn' | 'ein',
+        taxId: '',
+        legalName: '',
+        verified: false,
         artStyle: '',
         medium: '',
         bio: '',
@@ -103,10 +107,56 @@ export default function ArtistOnboardingPage() {
         if (currentStep === 1) {
             return formData.firstName && formData.lastName && formData.email && formData.phone && formData.city && formData.country && dataConsent;
         }
+
+        // Step 4: Tax Verification - check if required fields are filled (no state updates!)
+        if (currentStep === 4) {
+            if (!formData.taxId || !formData.legalName) {
+                return false;
+            }
+
+            // Validate SSN format (XXX-XX-XXXX)
+            if (formData.taxIdType === 'ssn' && !/^\d{3}-\d{2}-\d{4}$/.test(formData.taxId)) {
+                return false;
+            }
+
+            // Validate EIN format (XX-XXXXXXX)
+            if (formData.taxIdType === 'ein' && !/^\d{2}-\d{7}$/.test(formData.taxId)) {
+                return false;
+            }
+
+            return true;
+        }
+
         return true;
     };
 
     const handleNext = () => {
+        // Clear any previous errors
+        setError(null);
+
+        // Validate Step 4 and show specific error messages
+        if (currentStep === 4) {
+            if (!formData.taxId || !formData.legalName) {
+                setError('Tax ID and Legal Name are required');
+                return;
+            }
+
+            // Validate SSN format (XXX-XX-XXXX)
+            if (formData.taxIdType === 'ssn' && !/^\d{3}-\d{2}-\d{4}$/.test(formData.taxId)) {
+                setError('Please enter a valid SSN (format: XXX-XX-XXXX)');
+                return;
+            }
+
+            // Validate EIN format (XX-XXXXXXX)
+            if (formData.taxIdType === 'ein' && !/^\d{2}-\d{7}$/.test(formData.taxId)) {
+                setError('Please enter a valid EIN (format: XX-XXXXXXX)');
+                return;
+            }
+
+            // Mark as verified on successful validation
+            setFormData({ ...formData, verified: true });
+        }
+
         saveProgress();
         if (currentStep < 6) setCurrentStep(currentStep + 1);
     };
@@ -240,59 +290,88 @@ export default function ArtistOnboardingPage() {
                                 </div>
                             </div>
 
-                            {/* Profile Photo */}
-                            <div className="bg-gray-50 p-6 rounded-lg">
-                                <Label className="text-lg font-semibold mb-3 block">Profile Photo</Label>
-                                <p className="text-sm text-gray-600 mb-4">A professional headshot helps collectors connect with you</p>
-                                <div className="flex items-center gap-6">
+                            {/* Profile Photo + Name Fields - Side by Side */}
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                {/* Left: Name Fields Stacked */}
+                                <div className="space-y-4">
+                                    <div>
+                                        <Label htmlFor="firstName">First Name *</Label>
+                                        <Input
+                                            id="firstName"
+                                            placeholder="Maria"
+                                            value={formData.firstName}
+                                            onChange={(e) => {
+                                                const newFirstName = e.target.value;
+                                                setFormData({
+                                                    ...formData,
+                                                    firstName: newFirstName,
+                                                    // Auto-generate artist name if not manually overridden
+                                                    displayName: formData.displayName === '' || formData.displayName === `${formData.firstName} ${formData.lastName}`.trim()
+                                                        ? `${newFirstName} ${formData.lastName}`.trim()
+                                                        : formData.displayName
+                                                });
+                                            }}
+                                        />
+                                    </div>
+
+                                    <div>
+                                        <Label htmlFor="lastName">Last Name *</Label>
+                                        <Input
+                                            id="lastName"
+                                            placeholder="Rodriguez"
+                                            value={formData.lastName}
+                                            onChange={(e) => {
+                                                const newLastName = e.target.value;
+                                                setFormData({
+                                                    ...formData,
+                                                    lastName: newLastName,
+                                                    // Auto-generate artist name if not manually overridden
+                                                    displayName: formData.displayName === '' || formData.displayName === `${formData.firstName} ${formData.lastName}`.trim()
+                                                        ? `${formData.firstName} ${newLastName}`.trim()
+                                                        : formData.displayName
+                                                });
+                                            }}
+                                        />
+                                    </div>
+
+                                    <div>
+                                        <Label htmlFor="displayName">Artist Name *</Label>
+                                        <Input
+                                            id="displayName"
+                                            placeholder="How you'll appear to collectors"
+                                            value={formData.displayName || `${formData.firstName} ${formData.lastName}`.trim()}
+                                            onChange={(e) => setFormData({ ...formData, displayName: e.target.value })}
+                                        />
+                                        <p className="text-xs text-gray-500 mt-1">
+                                            Defaults to your full name. Change it to use a unique artist name.
+                                        </p>
+                                    </div>
+                                </div>
+
+                                {/* Right: Profile Photo */}
+                                <div className="flex flex-col items-center justify-start space-y-4">
                                     <div className="relative">
-                                        <div className="h-24 w-24 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden">
+                                        <div className="h-32 w-32 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden border-4 border-white shadow-lg">
                                             {profilePhoto ? (
                                                 <Image src={profilePhoto} alt="Profile" fill className="object-cover" />
                                             ) : (
-                                                <Camera className="h-8 w-8 text-gray-400" />
+                                                <div className="flex flex-col items-center text-gray-400">
+                                                    <Camera className="h-10 w-10 mb-1" />
+                                                    <span className="text-xs">Photo</span>
+                                                </div>
                                             )}
                                         </div>
                                     </div>
                                     <label>
                                         <input type="file" accept="image/*" onChange={handlePhotoUpload} className="hidden" />
-                                        <Button type="button" variant="outline" asChild>
-                                            <span>Upload Photo</span>
+                                        <Button type="button" variant="outline" size="sm" asChild>
+                                            <span>{profilePhoto ? 'Change Photo' : 'Upload Photo'}</span>
                                         </Button>
                                     </label>
+                                    <p className="text-xs text-gray-500 text-center max-w-[140px]">
+                                        Professional headshot recommended
+                                    </p>
                                 </div>
-                            </div>
-
-                            {/* Name Fields */}
-                            <div className="grid grid-cols-2 gap-4">
-                                <div>
-                                    <Label htmlFor="firstName">First Name *</Label>
-                                    <Input
-                                        id="firstName"
-                                        placeholder="Maria"
-                                        value={formData.firstName}
-                                        onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
-                                    />
-                                </div>
-                                <div>
-                                    <Label htmlFor="lastName">Last Name *</Label>
-                                    <Input
-                                        id="lastName"
-                                        placeholder="Rodriguez"
-                                        value={formData.lastName}
-                                        onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
-                                    />
-                                </div>
-                            </div>
-
-                            <div>
-                                <Label htmlFor="displayName">Display Name (Artist Name)</Label>
-                                <Input
-                                    id="displayName"
-                                    placeholder="e.g., M. Rodriguez or leave blank for full name"
-                                    value={formData.displayName}
-                                    onChange={(e) => setFormData({ ...formData, displayName: e.target.value })}
-                                />
                             </div>
 
                             <div className="grid grid-cols-2 gap-4">
@@ -612,265 +691,434 @@ export default function ArtistOnboardingPage() {
                     )}
 
                     {/* Step 4: Your Art */}
+                    {/* Step 4: Tax Verification */}
                     {currentStep === 4 && (
                         <div className="space-y-6">
                             <div className="flex items-center gap-3 pb-4 border-b">
-                                <div className="h-12 w-12 rounded-full bg-purple-100 flex items-center justify-center">
-                                    <span className="text-2xl">🎨</span>
+                                <div className="h-12 w-12 rounded-full bg-blue-100 flex items-center justify-center">
+                                    <span className="text-2xl">🛡️</span>
                                 </div>
                                 <div>
-                                    <h2 className="text-2xl font-bold">Your Art</h2>
-                                    <p className="text-gray-600">Tell us about your artistic style and work</p>
+                                    <h2 className="text-2xl font-bold">Tax Verification</h2>
+                                    <p className="text-gray-600">Required for invoice generation and payouts</p>
                                 </div>
                             </div>
 
-                            {/* Art Style */}
-                            <div>
-                                <Label htmlFor="artStyle">Primary Art Style *</Label>
-                                <Select
-                                    value={formData.artStyle || ''}
-                                    onValueChange={(value) => setFormData({ ...formData, artStyle: value })}
-                                >
-                                    <SelectTrigger>
-                                        <SelectValue placeholder="Select your primary style..." />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        <SelectItem value="abstract">Abstract</SelectItem>
-                                        <SelectItem value="realism">Realism</SelectItem>
-                                        <SelectItem value="impressionism">Impressionism</SelectItem>
-                                        <SelectItem value="expressionism">Expressionism</SelectItem>
-                                        <SelectItem value="surrealism">Surrealism</SelectItem>
-                                        <SelectItem value="contemporary">Contemporary</SelectItem>
-                                        <SelectItem value="modern">Modern</SelectItem>
-                                        <SelectItem value="minimalism">Minimalism</SelectItem>
-                                        <SelectItem value="pop-art">Pop Art</SelectItem>
-                                        <SelectItem value="street-art">Street Art</SelectItem>
-                                        <SelectItem value="figurative">Figurative</SelectItem>
-                                        <SelectItem value="landscape">Landscape</SelectItem>
-                                        <SelectItem value="other">Other</SelectItem>
-                                    </SelectContent>
-                                </Select>
+                            {/* Why We Need This */}
+                            <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
+                                <h3 className="font-semibold text-blue-900 flex items-center gap-2 mb-3">
+                                    <span>ℹ️</span> Why We Need This Information
+                                </h3>
+                                <ul className="space-y-2 text-sm text-blue-800">
+                                    <li>• <strong>ARTDistrictUSA creates professional invoices</strong> for you to send to buyers</li>
+                                    <li>• Your tax ID is included on all invoices for legal compliance</li>
+                                    <li>• Required by Stripe for payout verification and KYC compliance</li>
+                                    <li>• Anti-money laundering (AML) regulations require verification</li>
+                                    <li>• This information is encrypted and stored securely</li>
+                                </ul>
                             </div>
 
-                            {/* Medium */}
+                            {/* Tax ID Type Selection */}
                             <div>
-                                <Label htmlFor="medium">Primary Medium *</Label>
-                                <Select
-                                    value={formData.medium || ''}
-                                    onValueChange={(value) => setFormData({ ...formData, medium: value })}
-                                >
-                                    <SelectTrigger>
-                                        <SelectValue placeholder="Select your primary medium..." />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        <SelectItem value="oil">Oil Painting</SelectItem>
-                                        <SelectItem value="acrylic">Acrylic Painting</SelectItem>
-                                        <SelectItem value="watercolor">Watercolor</SelectItem>
-                                        <SelectItem value="mixed-media">Mixed Media</SelectItem>
-                                        <SelectItem value="digital">Digital Art</SelectItem>
-                                        <SelectItem value="photography">Photography</SelectItem>
-                                        <SelectItem value="sculpture">Sculpture</SelectItem>
-                                        <SelectItem value="ceramics">Ceramics</SelectItem>
-                                        <SelectItem value="printmaking">Printmaking</SelectItem>
-                                        <SelectItem value="drawing">Drawing</SelectItem>
-                                        <SelectItem value="collage">Collage</SelectItem>
-                                        <SelectItem value="textile">Textile Art</SelectItem>
-                                        <SelectItem value="installation">Installation</SelectItem>
-                                        <SelectItem value="other">Other</SelectItem>
-                                    </SelectContent>
-                                </Select>
-                            </div>
-
-                            {/* Typical Dimensions */}
-                            <div>
-                                <Label className="mb-2 block">Typical Artwork Dimensions</Label>
-                                <div className="grid grid-cols-2 gap-4">
-                                    <div>
-                                        <Label htmlFor="widthRange" className="text-sm text-gray-600">Width Range</Label>
-                                        <Input
-                                            id="widthRange"
-                                            placeholder="e.g., 24-48 inches"
-                                            value={formData.widthRange}
-                                            onChange={(e) => setFormData({ ...formData, widthRange: e.target.value })}
-                                        />
+                                <Label className="text-base font-semibold mb-3 block">Tax ID Type (Required)</Label>
+                                <div className="space-y-3">
+                                    <div
+                                        className={`border-2 rounded-lg p-4 cursor-pointer transition ${formData.taxIdType === 'ssn' ? 'border-primary bg-primary/5' : 'border-gray-200'
+                                            }`}
+                                        onClick={() => setFormData({ ...formData, taxIdType: 'ssn' })}
+                                    >
+                                        <div className="flex items-center gap-3">
+                                            <input
+                                                type="radio"
+                                                checked={formData.taxIdType === 'ssn'}
+                                                onChange={() => setFormData({ ...formData, taxIdType: 'ssn' })}
+                                                className="h-4 w-4"
+                                            />
+                                            <div className="flex-1">
+                                                <div className="font-medium">Social Security Number (SSN)</div>
+                                                <div className="text-sm text-gray-600">For individual artists</div>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div>
-                                        <Label htmlFor="heightRange" className="text-sm text-gray-600">Height Range</Label>
-                                        <Input
-                                            id="heightRange"
-                                            placeholder="e.g., 30-60 inches"
-                                            value={formData.heightRange}
-                                            onChange={(e) => setFormData({ ...formData, heightRange: e.target.value })}
-                                        />
+                                    <div
+                                        className={`border-2 rounded-lg p-4 cursor-pointer transition ${formData.taxIdType === 'ein' ? 'border-primary bg-primary/5' : 'border-gray-200'
+                                            }`}
+                                        onClick={() => setFormData({ ...formData, taxIdType: 'ein' })}
+                                    >
+                                        <div className="flex items-center gap-3">
+                                            <input
+                                                type="radio"
+                                                checked={formData.taxIdType === 'ein'}
+                                                onChange={() => setFormData({ ...formData, taxIdType: 'ein' })}
+                                                className="h-4 w-4"
+                                            />
+                                            <div className="flex-1">
+                                                <div className="font-medium">Employer Identification Number (EIN)</div>
+                                                <div className="text-sm text-gray-600">For businesses or LLCs</div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                                <p className="text-xs text-gray-500 mt-1">
-                                    This helps collectors find work that fits their space
-                                </p>
                             </div>
 
-                            {/* Price Range */}
+                            {/* Tax ID Input */}
                             <div>
-                                <Label htmlFor="priceRange">Typical Price Range</Label>
+                                <Label htmlFor="taxId">
+                                    {formData.taxIdType === 'ssn' ? 'Social Security Number *' : 'Employer ID Number *'}
+                                </Label>
                                 <Input
-                                    id="priceRange"
-                                    placeholder="e.g., $500-$5,000"
-                                    value={formData.priceRange}
-                                    onChange={(e) => setFormData({ ...formData, priceRange: e.target.value })}
+                                    id="taxId"
+                                    type="text"
+                                    placeholder={formData.taxIdType === 'ssn' ? 'XXX-XX-XXXX' : 'XX-XXXXXXX'}
+                                    value={formData.taxId}
+                                    onChange={(e) => {
+                                        let value = e.target.value.replace(/\D/g, ''); // Remove non-digits
+                                        if (formData.taxIdType === 'ssn') {
+                                            // Format as XXX-XX-XXXX
+                                            if (value.length > 3 && value.length <= 5) {
+                                                value = value.slice(0, 3) + '-' + value.slice(3);
+                                            } else if (value.length > 5) {
+                                                value = value.slice(0, 3) + '-' + value.slice(3, 5) + '-' + value.slice(5, 9);
+                                            }
+                                        } else {
+                                            // Format as XX-XXXXXXX
+                                            if (value.length > 2) {
+                                                value = value.slice(0, 2) + '-' + value.slice(2, 9);
+                                            }
+                                        }
+                                        setFormData({ ...formData, taxId: value });
+                                    }}
+                                    maxLength={formData.taxIdType === 'ssn' ? 11 : 10}
                                 />
                                 <p className="text-xs text-gray-500 mt-1">
-                                    Give collectors an idea of your pricing
+                                    Format: {formData.taxIdType === 'ssn' ? 'XXX-XX-XXXX' : 'XX-XXXXXXX'}
                                 </p>
                             </div>
 
-                            {/* Accept Commissions */}
+                            {/* Legal Name */}
                             <div>
-                                <Label htmlFor="acceptsCommissions">Do you accept commissions?</Label>
-                                <Select
-                                    value={formData.acceptsCommissions}
-                                    onValueChange={(value) => setFormData({ ...formData, acceptsCommissions: value })}
-                                >
-                                    <SelectTrigger>
-                                        <SelectValue placeholder="Select..." />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        <SelectItem value="yes">Yes - Open to commissions</SelectItem>
-                                        <SelectItem value="maybe">Maybe - Case by case</SelectItem>
-                                        <SelectItem value="no">No - Original work only</SelectItem>
-                                    </SelectContent>
-                                </Select>
+                                <Label htmlFor="legalName">Legal Name (as on tax forms) *</Label>
+                                <Input
+                                    id="legalName"
+                                    placeholder="Full legal name"
+                                    value={formData.legalName}
+                                    onChange={(e) => setFormData({ ...formData, legalName: e.target.value })}
+                                />
+                                <p className="text-xs text-gray-500 mt-1">
+                                    This must match the name on your tax ID
+                                </p>
                             </div>
+
+                            {/* Security Reassurance */}
+                            <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
+                                <div className="flex items-start gap-3">
+                                    <span className="text-xl">🔒</span>
+                                    <div className="flex-1">
+                                        <div className="font-semibold text-gray-900 mb-1">Your Information is Secure</div>
+                                        <p className="text-sm text-gray-600">
+                                            Your tax information is encrypted and stored securely. We never share your SSN or EIN with anyone.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Tax Responsibility Note */}
+                            <div className="bg-amber-50 border border-amber-200 rounded-lg p-4">
+                                <div className="flex items-start gap-3">
+                                    <span className="text-xl">ℹ️</span>
+                                    <div className="flex-1">
+                                        <div className="font-semibold text-amber-900 mb-1">Tax Reporting</div>
+                                        <p className="text-sm text-amber-800">
+                                            You are responsible for reporting your income to the IRS. ARTDistrictUSA does not issue 1099 forms.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Verification Badge Preview */}
+                            {formData.verified && (
+                                <div className="bg-green-50 border-2 border-green-500 rounded-lg p-4">
+                                    <div className="flex items-center gap-3">
+                                        <span className="text-3xl">✅</span>
+                                        <div className="flex-1">
+                                            <div className="font-bold text-green-900 text-lg">VERIFIED by ARTDistrictUSA.com</div>
+                                            <p className="text-sm text-green-700">Tax information confirmed</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+
+                            {error && (
+                                <div className="bg-red-50 border border-red-200 rounded-lg p-3 text-red-700 text-sm">
+                                    {error}
+                                </div>
+                            )}
                         </div>
                     )}
 
                     {/* Step 5: Your Story */}
+                    {/* Step 5: Your Profile (Combined Art + Story) */}
                     {currentStep === 5 && (
                         <div className="space-y-6">
                             <div className="flex items-center gap-3 pb-4 border-b">
-                                <div className="h-12 w-12 rounded-full bg-green-100 flex items-center justify-center">
-                                    <span className="text-2xl">✍️</span>
+                                <div className="h-12 w-12 rounded-full bg-blue-100 flex items-center justify-center">
+                                    <span className="text-2xl">🌐</span>
                                 </div>
                                 <div>
-                                    <h2 className="text-2xl font-bold">Your Story</h2>
-                                    <p className="text-gray-600">Tell collectors about your artistic journey</p>
+                                    <h2 className="text-2xl font-bold">Social & Web Presence</h2>
+                                    <p className="text-gray-600">Connect your online presence to build credibility</p>
                                 </div>
                             </div>
 
-                            {/* Artistic Experience */}
-                            <div>
-                                <Label htmlFor="experience">Artistic Experience & Background</Label>
-                                <Input
-                                    id="experience"
-                                    placeholder="e.g., 15 years painting abstract expressionism, MFA from NYU..."
-                                    value={formData.experience}
-                                    onChange={(e) => setFormData({ ...formData, experience: e.target.value })}
-                                />
-                                <p className="text-xs text-gray-500 mt-1">Share your training, style evolution, and what inspires your work</p>
-                            </div>
+                            {/* SECTION 1: Your Art */}
+                            <div className="border-b pb-6">
+                                <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
+                                    <span>🎨</span> Your Art
+                                </h3>
 
-                            {/* Biography Options */}
-                            <div>
-                                <Label className="mb-3 block">Artist Biography</Label>
-
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                                    {/* Option 1: Write Your Own */}
-                                    <div className="border-2 border-gray-200 rounded-lg p-4 hover:border-primary/50 transition-colors">
-                                        <div className="flex items-start gap-3">
-                                            <div className="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
-                                                <span className="text-lg">✏️</span>
-                                            </div>
-                                            <div className="flex-1">
-                                                <h3 className="font-semibold text-sm mb-1">Write Your Own</h3>
-                                                <p className="text-xs text-gray-600">Craft your biography from scratch</p>
-                                            </div>
-                                        </div>
+                                {/* Art Style */}
+                                <div className="space-y-4">
+                                    <div>
+                                        <Label htmlFor="artStyle">Primary Art Style *</Label>
+                                        <Select
+                                            value={formData.artStyle || ''}
+                                            onValueChange={(value) => setFormData({ ...formData, artStyle: value })}
+                                        >
+                                            <SelectTrigger>
+                                                <SelectValue placeholder="Select your primary style..." />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                <SelectItem value="abstract">Abstract</SelectItem>
+                                                <SelectItem value="realism">Realism</SelectItem>
+                                                <SelectItem value="impressionism">Impressionism</SelectItem>
+                                                <SelectItem value="expressionism">Expressionism</SelectItem>
+                                                <SelectItem value="surrealism">Surrealism</SelectItem>
+                                                <SelectItem value="contemporary">Contemporary</SelectItem>
+                                                <SelectItem value="modern">Modern</SelectItem>
+                                                <SelectItem value="minimalism">Minimalism</SelectItem>
+                                                <SelectItem value="pop-art">Pop Art</SelectItem>
+                                                <SelectItem value="street-art">Street Art</SelectItem>
+                                                <SelectItem value="figurative">Figurative</SelectItem>
+                                                <SelectItem value="landscape">Landscape</SelectItem>
+                                                <SelectItem value="other">Other</SelectItem>
+                                            </SelectContent>
+                                        </Select>
                                     </div>
 
-                                    {/* Option 2: Generate with AI */}
-                                    <div className="border-2 border-gray-200 rounded-lg p-4 hover:border-primary/50 transition-colors">
-                                        <div className="flex items-start gap-3">
-                                            <div className="h-10 w-10 rounded-full bg-purple-100 flex items-center justify-center flex-shrink-0">
-                                                <span className="text-lg">✨</span>
-                                            </div>
-                                            <div className="flex-1">
-                                                <h3 className="font-semibold text-sm mb-1">Generate with AI</h3>
-                                                <p className="text-xs text-gray-600 mb-2">Let AI create a professional bio</p>
-                                                <Button
-                                                    type="button"
-                                                    variant="outline"
-                                                    size="sm"
-                                                    onClick={handleGenerateBio}
-                                                    disabled={generatingBio || !formData.experience}
-                                                    className="gap-2 w-full"
-                                                >
-                                                    {generatingBio ? (
-                                                        <>
-                                                            <Loader2 className="h-3 w-3 animate-spin" />
-                                                            Generating...
-                                                        </>
-                                                    ) : (
-                                                        <>
-                                                            <span>✨</span>
-                                                            Generate Bio
-                                                        </>
-                                                    )}
-                                                </Button>
-                                            </div>
-                                        </div>
+                                    {/* Medium */}
+                                    <div>
+                                        <Label htmlFor="medium">Primary Medium *</Label>
+                                        <Select
+                                            value={formData.medium || ''}
+                                            onValueChange={(value) => setFormData({ ...formData, medium: value })}
+                                        >
+                                            <SelectTrigger>
+                                                <SelectValue placeholder="Select your primary medium..." />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                <SelectItem value="oil">Oil Painting</SelectItem>
+                                                <SelectItem value="acrylic">Acrylic Painting</SelectItem>
+                                                <SelectItem value="watercolor">Watercolor</SelectItem>
+                                                <SelectItem value="mixed-media">Mixed Media</SelectItem>
+                                                <SelectItem value="digital">Digital Art</SelectItem>
+                                                <SelectItem value="photography">Photography</SelectItem>
+                                                <SelectItem value="sculpture">Sculpture</SelectItem>
+                                                <SelectItem value="ceramics">Ceramics</SelectItem>
+                                                <SelectItem value="printmaking">Printmaking</SelectItem>
+                                                <SelectItem value="drawing">Drawing</SelectItem>
+                                                <SelectItem value="collage">Collage</SelectItem>
+                                                <SelectItem value="textile">Textile Art</SelectItem>
+                                                <SelectItem value="installation">Installation</SelectItem>
+                                                <SelectItem value="other">Other</SelectItem>
+                                            </SelectContent>
+                                        </Select>
                                     </div>
-                                </div>
 
-                                {/* Biography Textarea */}
-                                <Textarea
-                                    id="bio"
-                                    placeholder="Share your artistic journey, inspirations, and what makes your work unique..."
-                                    value={formData.bio}
-                                    onChange={(e) => setFormData({ ...formData, bio: e.target.value })}
-                                    rows={8}
-                                    className="resize-none"
-                                />
-                                <p className="text-xs text-gray-500 mt-1">
-                                    A compelling bio helps collectors connect with you and your work
-                                </p>
-                            </div>
-
-                            {/* Biography File Upload */}
-                            <div>
-                                <Label htmlFor="bioFile" className="mb-2 block">Or Upload Biography Document (Optional)</Label>
-                                <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-primary/50 transition-colors">
-                                    <input
-                                        type="file"
-                                        id="bioFile"
-                                        accept=".pdf,.doc,.docx,.png,.jpg,.jpeg"
-                                        className="hidden"
-                                        onChange={(e) => {
-                                            const file = e.target.files?.[0];
-                                            if (file) {
-                                                // Handle file upload - for now just show the filename
-                                                setFormData({ ...formData, bioFile: file.name });
-                                            }
-                                        }}
-                                    />
-                                    <label htmlFor="bioFile" className="cursor-pointer">
-                                        <div className="flex flex-col items-center gap-2">
-                                            <div className="h-12 w-12 rounded-full bg-gray-100 flex items-center justify-center">
-                                                <span className="text-2xl">📄</span>
+                                    {/* Typical Dimensions */}
+                                    <div>
+                                        <Label className="mb-2 block">Typical Artwork Dimensions</Label>
+                                        <div className="grid grid-cols-2 gap-4">
+                                            <div>
+                                                <Label htmlFor="widthRange" className="text-sm text-gray-600">Width Range</Label>
+                                                <Input
+                                                    id="widthRange"
+                                                    placeholder="e.g., 24-48 inches"
+                                                    value={formData.widthRange}
+                                                    onChange={(e) => setFormData({ ...formData, widthRange: e.target.value })}
+                                                />
                                             </div>
                                             <div>
-                                                <p className="text-sm font-medium text-gray-700">Upload Biography</p>
-                                                <p className="text-xs text-gray-500">PDF, Word, or Image (PNG/JPG)</p>
+                                                <Label htmlFor="heightRange" className="text-sm text-gray-600">Height Range</Label>
+                                                <Input
+                                                    id="heightRange"
+                                                    placeholder="e.g., 30-60 inches"
+                                                    value={formData.heightRange}
+                                                    onChange={(e) => setFormData({ ...formData, heightRange: e.target.value })}
+                                                />
                                             </div>
-                                            {formData.bioFile && (
-                                                <p className="text-xs text-green-600 font-medium">
-                                                    ✓ {formData.bioFile}
-                                                </p>
-                                            )}
                                         </div>
-                                    </label>
+                                        <p className="text-xs text-gray-500 mt-1">
+                                            This helps collectors find work that fits their space
+                                        </p>
+                                    </div>
+
+                                    {/* Price Range */}
+                                    <div>
+                                        <Label htmlFor="priceRange">Typical Price Range</Label>
+                                        <Input
+                                            id="priceRange"
+                                            placeholder="e.g., $500-$5,000"
+                                            value={formData.priceRange}
+                                            onChange={(e) => setFormData({ ...formData, priceRange: e.target.value })}
+                                        />
+                                        <p className="text-xs text-gray-500 mt-1">
+                                            Give collectors an idea of your pricing
+                                        </p>
+                                    </div>
+
+                                    {/* Accept Commissions */}
+                                    <div>
+                                        <Label htmlFor="acceptsCommissions">Do you accept commissions?</Label>
+                                        <Select
+                                            value={formData.acceptsCommissions}
+                                            onValueChange={(value) => setFormData({ ...formData, acceptsCommissions: value })}
+                                        >
+                                            <SelectTrigger>
+                                                <SelectValue placeholder="Select..." />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                <SelectItem value="yes">Yes - Open to commissions</SelectItem>
+                                                <SelectItem value="maybe">Maybe - Case by case</SelectItem>
+                                                <SelectItem value="no">No - Original work only</SelectItem>
+                                            </SelectContent>
+                                        </Select>
+                                    </div>
                                 </div>
-                                <p className="text-xs text-gray-500 mt-2">
-                                    Upload an existing biography document if you have one prepared
-                                </p>
+                            </div>
+
+                            {/* SECTION 2: Your Story */}
+                            <div className="pt-6">
+                                <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
+                                    <span>✍️</span> Your Story
+                                </h3>
+
+                                {/* Artistic Experience */}
+                                <div className="space-y-4">
+                                    <div>
+                                        <Label htmlFor="experience">Artistic Experience & Background</Label>
+                                        <Input
+                                            id="experience"
+                                            placeholder="e.g., 15 years painting abstract expressionism, MFA from NYU..."
+                                            value={formData.experience}
+                                            onChange={(e) => setFormData({ ...formData, experience: e.target.value })}
+                                        />
+                                        <p className="text-xs text-gray-500 mt-1">Share your training, style evolution, and what inspires your work</p>
+                                    </div>
+
+                                    {/* Biography Options */}
+                                    <div>
+                                        <Label className="mb-3 block">Artist Biography</Label>
+
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                                            {/* Option 1: Write Your Own */}
+                                            <div className="border-2 border-gray-200 rounded-lg p-4 hover:border-primary/50 transition-colors">
+                                                <div className="flex items-start gap-3">
+                                                    <div className="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
+                                                        <span className="text-lg">✏️</span>
+                                                    </div>
+                                                    <div className="flex-1">
+                                                        <h4 className="font-semibold text-sm mb-1">Write Your Own</h4>
+                                                        <p className="text-xs text-gray-600">Craft your biography from scratch</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            {/* Option 2: Generate with AI */}
+                                            <div className="border-2 border-gray-200 rounded-lg p-4 hover:border-primary/50 transition-colors">
+                                                <div className="flex items-start gap-3">
+                                                    <div className="h-10 w-10 rounded-full bg-purple-100 flex items-center justify-center flex-shrink-0">
+                                                        <span className="text-lg">✨</span>
+                                                    </div>
+                                                    <div className="flex-1">
+                                                        <h4 className="font-semibold text-sm mb-1">Generate with AI</h4>
+                                                        <p className="text-xs text-gray-600 mb-2">Let AI create a professional bio</p>
+                                                        <Button
+                                                            type="button"
+                                                            variant="outline"
+                                                            size="sm"
+                                                            onClick={handleGenerateBio}
+                                                            disabled={generatingBio || !formData.experience}
+                                                            className="gap-2 w-full"
+                                                        >
+                                                            {generatingBio ? (
+                                                                <>
+                                                                    <Loader2 className="h-3 w-3 animate-spin" />
+                                                                    Generating...
+                                                                </>
+                                                            ) : (
+                                                                <>
+                                                                    <span>✨</span>
+                                                                    Generate Bio
+                                                                </>
+                                                            )}
+                                                        </Button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        {/* Biography Textarea */}
+                                        <Textarea
+                                            id="bio"
+                                            placeholder="Share your artistic journey, inspirations, and what makes your work unique..."
+                                            value={formData.bio}
+                                            onChange={(e) => setFormData({ ...formData, bio: e.target.value })}
+                                            rows={8}
+                                            className="resize-none"
+                                        />
+                                        <p className="text-xs text-gray-500 mt-1">
+                                            A compelling bio helps collectors connect with you and your work
+                                        </p>
+                                    </div>
+
+                                    {/* Biography File Upload */}
+                                    <div>
+                                        <Label htmlFor="bioFile" className="mb-2 block">Or Upload Biography Document (Optional)</Label>
+                                        <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-primary/50 transition-colors">
+                                            <input
+                                                type="file"
+                                                id="bioFile"
+                                                accept=".pdf,.doc,.docx,.png,.jpg,.jpeg"
+                                                className="hidden"
+                                                onChange={(e) => {
+                                                    const file = e.target.files?.[0];
+                                                    if (file) {
+                                                        setFormData({ ...formData, bioFile: file.name });
+                                                    }
+                                                }}
+                                            />
+                                            <label htmlFor="bioFile" className="cursor-pointer">
+                                                <div className="flex flex-col items-center gap-2">
+                                                    <div className="h-12 w-12 rounded-full bg-gray-100 flex items-center justify-center">
+                                                        <span className="text-2xl">📄</span>
+                                                    </div>
+                                                    <div>
+                                                        <p className="text-sm font-medium text-gray-700">Upload Biography</p>
+                                                        <p className="text-xs text-gray-500">PDF, Word, or Image (PNG/JPG)</p>
+                                                    </div>
+                                                    {formData.bioFile && (
+                                                        <p className="text-xs text-green-600 font-medium">
+                                                            ✓ {formData.bioFile}
+                                                        </p>
+                                                    )}
+                                                </div>
+                                            </label>
+                                        </div>
+                                        <p className="text-xs text-gray-500 mt-2">
+                                            Upload an existing biography document if you have one prepared
+                                        </p>
+                                    </div>
+                                </div>
                             </div>
 
                             {error && (
@@ -885,12 +1133,12 @@ export default function ArtistOnboardingPage() {
                     {currentStep === 6 && (
                         <div className="space-y-6">
                             <div className="flex items-center gap-3 pb-4 border-b">
-                                <div className="h-12 w-12 rounded-full bg-blue-100 flex items-center justify-center">
-                                    <span className="text-2xl">🌐</span>
+                                <div className="h-12 w-12 rounded-full bg-purple-100 flex items-center justify-center">
+                                    <span className="text-2xl">🎨</span>
                                 </div>
                                 <div>
-                                    <h2 className="text-2xl font-bold">Social & Web Presence</h2>
-                                    <p className="text-gray-600">Connect your online presence to build credibility</p>
+                                    <h2 className="text-2xl font-bold">Your Profile</h2>
+                                    <p className="text-gray-600">Tell us about your art and your story</p>
                                 </div>
                             </div>
 
