@@ -200,7 +200,7 @@ export default function PrivacyPage() {
                     </p>
                     <p className="text-gray-700 mt-4">
                         <strong>Email:</strong> <a href="mailto:privacy@artdistrictusa.com" className="text-primary hover:underline">privacy@artdistrictusa.com</a><br />
-                        <strong>Phone:</strong> <a href="tel:+18888888888" className="text-primary hover:underline">888-888-8888</a><br />
+                        <strong>Phone:</strong> <a href="tel:+17027603006" className="text-primary hover:underline">702-760-3006</a><br />
                         <strong>Mail:</strong> ARTDistrictUSA Privacy Team, [Address], USA
                     </p>
                 </section>

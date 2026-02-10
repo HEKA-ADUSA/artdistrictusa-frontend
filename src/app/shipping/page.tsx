@@ -132,7 +132,7 @@ export default function ShippingPage() {
                     </a>
                     <span className="hidden sm:inline">|</span>
                     <a href="tel:+18888888888" className="text-primary hover:underline font-semibold">
-                        888-888-8888
+                        <a href="tel:+17027603006" className="text-primary hover:underline">702-760-3006</a>
                     </a>
                 </div>
             </section>

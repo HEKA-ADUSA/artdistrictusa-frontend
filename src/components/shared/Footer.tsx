@@ -151,7 +151,7 @@ export function Footer() {
                             <li className="flex items-center gap-2">
                                 📞
                                 <a href="tel:+18888888888" className="hover:text-primary transition-colors">
-                                    24/7 at 888-888-8888
+                                    24/7 at <a href="tel:+17027603006" className="text-white hover:underline">702-760-3006</a>
                                 </a>
                             </li>
                             <li>📍 Based in USA</li>

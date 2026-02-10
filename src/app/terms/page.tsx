@@ -149,7 +149,7 @@ export default function TermsPage() {
                     </p>
                     <p className="text-gray-700 mt-2">
                         <strong>Email:</strong> <a href="mailto:legal@artdistrictusa.com" className="text-primary hover:underline">legal@artdistrictusa.com</a><br />
-                        <strong>Phone:</strong> <a href="tel:+18888888888" className="text-primary hover:underline">888-888-8888</a>
+                        <strong>Phone:</strong> <a href="tel:+17027603006" className="text-primary hover:underline">702-760-3006</a>
                     </p>
                 </section>
             </div>
