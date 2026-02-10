@@ -1,13 +1,13 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Artwork } from '@/types';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
-import { ShoppingCart, Heart, Share2, ArrowLeft } from 'lucide-react';
+import { ShoppingCart, Heart, Share2, ArrowLeft, Bookmark } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface ArtworkDetailProps {
@@ -18,6 +18,49 @@ export function ArtworkDetail({ artwork }: ArtworkDetailProps) {
     const [selectedImage, setSelectedImage] = useState(
         artwork.images.find(img => img.isPrimary) || artwork.images[0]
     );
+    const [isLiked, setIsLiked] = useState(false);
+    const [isWishlisted, setIsWishlisted] = useState(false);
+
+    // Load liked/wishlist status from localStorage on mount
+    useEffect(() => {
+        const likedArtworks = JSON.parse(localStorage.getItem('liked-artworks') || '[]');
+        const wishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
+
+        setIsLiked(likedArtworks.includes(artwork.id));
+        setIsWishlisted(wishlist.includes(artwork.id));
+    }, [artwork.id]);
+
+    const toggleLike = () => {
+        const likedArtworks = JSON.parse(localStorage.getItem('liked-artworks') || '[]');
+
+        if (isLiked) {
+            // Remove from likes
+            const updated = likedArtworks.filter((id: string) => id !== artwork.id);
+            localStorage.setItem('liked-artworks', JSON.stringify(updated));
+            setIsLiked(false);
+        } else {
+            // Add to likes
+            likedArtworks.push(artwork.id);
+            localStorage.setItem('liked-artworks', JSON.stringify(likedArtworks));
+            setIsLiked(true);
+        }
+    };
+
+    const toggleWishlist = () => {
+        const wishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
+
+        if (isWishlisted) {
+            // Remove from wishlist
+            const updated = wishlist.filter((id: string) => id !== artwork.id);
+            localStorage.setItem('wishlist', JSON.stringify(updated));
+            setIsWishlisted(false);
+        } else {
+            // Add to wishlist
+            wishlist.push(artwork.id);
+            localStorage.setItem('wishlist', JSON.stringify(wishlist));
+            setIsWishlisted(true);
+        }
+    };
 
     return (
         <div className="container px-4 py-8 md:py-16">
