@@ -132,10 +132,36 @@ export function ArtworkDetail({ artwork }: ArtworkDetailProps) {
                                 <ShoppingCart className="mr-2 h-5 w-5" /> Inquire / Purchase
                             </Button>
                             <div className="flex gap-4">
-                                <Button variant="outline" size="icon" className="h-14 w-14 border-2">
-                                    <Heart className="h-6 w-6" />
+                                {/* Like Button */}
+                                <Button
+                                    variant="outline"
+                                    size="icon"
+                                    className={cn(
+                                        "h-14 w-14 border-2 transition-all",
+                                        isLiked ? "bg-red-50 border-red-500 text-red-600 hover:bg-red-100" : "hover:border-red-300"
+                                    )}
+                                    onClick={toggleLike}
+                                    aria-label={isLiked ? "Unlike artwork" : "Like artwork"}
+                                >
+                                    <Heart className={cn("h-6 w-6 transition-all", isLiked && "fill-current")} />
                                 </Button>
-                                <Button variant="outline" size="icon" className="h-14 w-14 border-2">
+
+                                {/* Wishlist Button */}
+                                <Button
+                                    variant="outline"
+                                    size="icon"
+                                    className={cn(
+                                        "h-14 w-14 border-2 transition-all",
+                                        isWishlisted ? "bg-blue-50 border-blue-500 text-blue-600 hover:bg-blue-100" : "hover:border-blue-300"
+                                    )}
+                                    onClick={toggleWishlist}
+                                    aria-label={isWishlisted ? "Remove from wishlist" : "Add to wishlist"}
+                                >
+                                    <Bookmark className={cn("h-6 w-6 transition-all", isWishlisted && "fill-current")} />
+                                </Button>
+
+                                {/* Share Button */}
+                                <Button variant="outline" size="icon" className="h-14 w-14 border-2 hover:border-gray-400">
                                     <Share2 className="h-6 w-6" />
                                 </Button>
                             </div>
